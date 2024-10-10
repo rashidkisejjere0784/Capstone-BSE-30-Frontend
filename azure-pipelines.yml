@@ -17,10 +17,15 @@ steps:
     checkLatest: true
   displayName: 'Install Node.js'
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+- task: Npm@1
+  displayName: "Install Packages"
+  inputs:
+    command: 'install'
+- task: Npm@1
+  displayName: 'Build the project'
+  inputs:
+    command: 'custom'
+    customCommand: 'run build'
 
 - task: CopyFiles@2
   inputs:
