@@ -12,85 +12,106 @@ import ContactUs from './pages/contactUs'
 import Cart from '@/pages/cart.tsx'
 import Checkout from '@/pages/checkout.tsx'
 import CheckAuth from './components/auth/CheckAuth'
+import { useEffect } from 'react'
+import { checkAuth } from '@/store/auth-slice'
+
+import { useDispatch, useSelector } from 'react-redux'
 const App = () => {
+  const { user, isAuthenticated, isLoading } = useSelector(
+    (state) => state.auth
+  )
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    // @ts-ignore
+    dispatch(checkAuth())
+  }, [dispatch])
+
+  if (isLoading) return <p>Page Loading</p>
+
+  console.log(isLoading, user)
+
   return (
     <Routes>
-      <Route path="/" element={<Base />}>
+      <Route path='/' element={<Base />}>
         <Route
           index
           element={
-            <CheckAuth>
+            <CheckAuth
+              isAuthenticated={isAuthenticated}
+              user={user}
+            >
               <Home />
             </CheckAuth>
           }
         />
         <Route
-          path={'auth'}
+          path='auth'
           element={
-            <CheckAuth>
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
               <AuthPage />
             </CheckAuth>
           }
         />
         <Route
-          path={'products'}
+          path='products'
           element={
-            <CheckAuth>
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
               <Products />
             </CheckAuth>
           }
         />
         <Route
-          path={'product/:productId'}
+          path='product/:productId'
           element={
-            <CheckAuth>
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
               <Product />
             </CheckAuth>
           }
         />
         <Route
-          path={'wishlist'}
+          path='wishlist'
           element={
-            <CheckAuth>
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
               <Wishlist />
             </CheckAuth>
           }
         />
         <Route
-          path={'/about'}
+          path='/about'
           element={
-            <CheckAuth>
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
               {' '}
               <About />
             </CheckAuth>
           }
         />
         <Route
-          path={'/cart'}
+          path='/cart'
           element={
-            <CheckAuth>
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
               <Cart />
             </CheckAuth>
           }
         />
         <Route
-          path={'/checkout'}
+          path='/checkout'
           element={
-            <CheckAuth>
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
               <Checkout />
             </CheckAuth>
           }
         />
         <Route
-          path={'/contact'}
+          path='/contact'
           element={
-            <CheckAuth>
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
               <ContactUs />
             </CheckAuth>
           }
         />
-        <Route path="*" element={<PageNotFound />} />
       </Route>
+      <Route path='*' element={<PageNotFound />} />
     </Routes>
   )
 }
