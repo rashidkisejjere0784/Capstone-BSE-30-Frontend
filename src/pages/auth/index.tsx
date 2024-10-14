@@ -6,69 +6,71 @@ import { Card, CardContent } from '@/components/ui/card.tsx'
 import { FaEye, FaEyeSlash, FaLongArrowAltRight } from 'react-icons/fa'
 import { useState } from 'react'
 import { usePasswordToggle } from '@/assets/utils.ts'
-import axios from 'axios'
-import {toast} from "@/hooks/use-toast.ts";
-const BACkEND_API = 'http://127.0.0.1:3000/api/auth/signup';
+import { loginUser, registerUser } from '@/store/auth-slice'
+import { useDispatch } from 'react-redux'
+import { useToast } from '@/hooks/use-toast.ts'
+
+const initialSignUpForm = {
+  name: '',
+  email: '',
+  password: '',
+  confirm_password: ''
+}
+
+const initialLoginForm = {
+  email: '',
+  password: '',
+}
 const AuthPage = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const { toast } = useToast();
+  const { inputType, visible, toggleVisibility } = usePasswordToggle()
+  const [logInForm, setLogInForm] = useState(initialLoginForm)
+  const [signUpForm, setSignUpForm] = useState(initialSignUpForm)
+
   const handleSignUp = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
-    try {
-      const response = await axios.post(BACkEND_API, signUpForm)
-
-      toast({
-        title: "Passed",
-        variant: "destructive",
-        duration: 2000
-      });
-
-      if (response) {
-        setSignUpForm({
-          name: '',
-          email: '',
-          password: '',
-          confirm_password: ''
+    // @ts-ignore
+    dispatch(registerUser(signUpForm)).then((data) => {
+      console.log(data)
+      if (data?.payload?.success) {
+        toast({
+          title: data?.payload?.message,
+          description: 'User Created Successfully',
+          variant: 'success'
+        })
+        setSignUpForm(initialSignUpForm)
+        navigate('/auth')
+      } else {
+        toast({
+          title: data?.payload?.message,
+          description: 'Failed to register new user',
+          variant: 'destructive'
         })
       }
-
-      console.log(response)
-      navigate('/')
-    } catch (error) {
-      console.log(error)
-      toast({
-        title: "Failed",
-        variant: "destructive",
-        duration: 2000
-      });
-    }
+    })
   }
 
 
   const handleLogin = async () => {
-    try {
-      const response = await axios.post(
-        'http://localhost:3000/api/auth/login',
-        logInForm
-      )
-      console.log(response)
-      //   if (response) {
-      //     navigate('/')
-      //   }
-    } catch (error) {
-      console.log(error)
-    }
+    // @ts-ignore
+    dispatch(loginUser(logInForm)).then((data) => {
+      if (data?.payload?.success) {
+        toast({
+          title: data?.payload?.message,
+          variant: "success"
+        });
+        navigate("/")
+      } else {
+        toast({
+          title: data?.payload?.message,
+          variant: "destructive",
+        });
+      }
+    });
   }
-  const { inputType, visible, toggleVisibility } = usePasswordToggle()
-  const [logInForm, setLogInForm] = useState({
-    email: '',
-    password: ''
-  })
-  const [signUpForm, setSignUpForm] = useState({
-    name: 'emm@gmail.com',
-    email: 'emm@gmail.com',
-    password: 'emm@gmail.com',
-    confirm_password: 'emm@gmail.com'
-  })
+
   const handleLogInFormOnChange = (e: {
     preventDefault: () => void
     target: { name: string; value: string }

@@ -13,9 +13,39 @@ import {
 import {FaXTwitter} from "react-icons/fa6";
 import {MdOutlineSmartphone, MdOutlineSupportAgent} from "react-icons/md";
 import {useState} from "react";
+import { useDispatch, useSelector } from 'react-redux'
+import { useToast } from '@/hooks/use-toast.ts'
+import { logoutUser } from '@/store/auth-slice'
 
 const Header = () => {
     const [activeTab, setActiveTab] = useState("all-category");
+    const dispatch = useDispatch();
+    const { toast } = useToast();
+    const { isAuthenticated } = useSelector(
+      (state) => state.auth
+    )
+
+    const handleLogout = (e: { preventDefault: () => void }) => {
+        e.preventDefault()
+        // @ts-ignore
+        dispatch(logoutUser()).then((data)=>{
+            if (data?.payload?.success) {
+                toast({
+                    title: data?.payload?.message,
+                    description: 'User Logout Successfully',
+                    variant: 'success'
+                })
+
+            } else {
+                toast({
+                    title: data?.payload?.message,
+                    description: 'Failed to Logout User',
+                    variant: 'destructive'
+                })
+            }
+        })
+
+    }
 
     const handleActiveTab = (value: string)=>{
         setActiveTab(value);
@@ -74,9 +104,12 @@ const Header = () => {
                                 <FaRegHeart />
                             </Link>
                             <Link to={"/auth"}>
-                                <div>
-                                    <FaRegUserCircle />
-                                </div>
+                                <form>
+                                    {
+                                        isAuthenticated ?
+                                          <button onClick={handleLogout} type={'submit'}>Log Out</button>:<FaRegUserCircle />
+                                    }
+                                </form>
                             </Link>
                         </div>
                     </div>

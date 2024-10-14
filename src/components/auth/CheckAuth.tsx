@@ -1,57 +1,66 @@
-import { Navigate, useLocation } from 'react-router-dom'
+import { Navigate, useLocation } from "react-router-dom";
 import { ReactNode } from 'react'
-
 interface Props {
-  children?: ReactNode
-  authenticated?: boolean
-  user?: { name?: string; role?: string }
+  isAuthenticated: boolean;
+  user: {
+    role: string
+  };
+  children?: ReactNode;
 }
-const CheckAuth = ({ children, authenticated, user }: Props) => {
-  const location = useLocation()
-  if (
-    location.pathname.includes('/patient') ||
-    location.pathname.includes('/lab-technician') ||
-    location.pathname.includes('/facility-admin') ||
-    location.pathname.includes('/doctor')
-  ) {
-    if (!authenticated) {
-      return <Navigate to={'/auth'} />
+function CheckAuth({ isAuthenticated, user, children }: Props) {
+  const location = useLocation();
+
+  console.log(location.pathname, isAuthenticated);
+
+  if (location.pathname === "/") {
+    if (!isAuthenticated) {
+      return <Navigate to="/auth" />;
     } else {
-      if (user?.role === 'patient' && !location.pathname.includes('/patient')) {
-        return <Navigate to={'/patient'} />
-      }
-      if (user?.role === 'doctor' && !location.pathname.includes('/doctor')) {
-        return <Navigate to={'/doctor'} />
-      } else if (
-        user?.role === 'lab-technician' &&
-        !location.pathname.includes('/lab-technician')
-      ) {
-        return <Navigate to={'/lab-technician'} />
-      } else if (
-        user?.role === 'facility-admin' &&
-        !location.pathname.includes('/facility-admin')
-      ) {
-        return <Navigate to={'/facility-admin'} />
+      if (user?.role === "admin") {
+        return <Navigate to="/admin/dashboard" />;
+      } else {
+        return <Navigate to="/" />;
       }
     }
   }
 
-  if (authenticated && location.pathname.includes('/auth')) {
-    if (user?.role === 'patient') {
-      return <Navigate to={'/patient'} />
-    }
-    if (user?.role === 'doctor') {
-      return <Navigate to={'/doctor'} />
-    }
-    if (user?.role === 'facility-admin') {
-      return <Navigate to={'/facility-admin'} />
-    }
-    if (user?.role === 'lab-technician') {
-      return <Navigate to={'/lab-technician'} />
+  if (
+    !isAuthenticated &&
+    !(
+      location.pathname.includes("/auth")
+    )
+  ) {
+    return <Navigate to="/auth" />;
+  }
+
+  if (
+    isAuthenticated &&
+    (location.pathname.includes("/auth"))
+  ) {
+    if (user?.role === "admin") {
+      return <Navigate to="/admin/dashboard" />;
+    } else {
+      return <Navigate to="/" />;
     }
   }
 
-  return <>{children}</>
+  if (
+    isAuthenticated &&
+    user?.role !== "admin" &&
+    location.pathname.includes("/admin")
+  ) {
+    return <Navigate to="/unauth-page" />;
+  }
+
+  if (
+    isAuthenticated &&
+    user?.role === "admin" &&
+    location.pathname.includes("/")
+  ) {
+    return <Navigate to="/admin/dashboard" />;
+  }
+
+  return <>{children}</>;
 }
 
-export default CheckAuth
+export default CheckAuth;
