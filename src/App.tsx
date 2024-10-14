@@ -37,12 +37,7 @@ const App = () => {
         <Route
           index
           element={
-            <CheckAuth
-              isAuthenticated={isAuthenticated}
-              user={user}
-            >
-              <Home />
-            </CheckAuth>
+            <Home />
           }
         />
         <Route
@@ -56,17 +51,13 @@ const App = () => {
         <Route
           path='products'
           element={
-            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-              <Products />
-            </CheckAuth>
+            <Products />
           }
         />
         <Route
           path='product/:productId'
           element={
-            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-              <Product />
-            </CheckAuth>
+            <Product />
           }
         />
         <Route
@@ -80,10 +71,7 @@ const App = () => {
         <Route
           path='/about'
           element={
-            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-              {' '}
-              <About />
-            </CheckAuth>
+            <About />
           }
         />
         <Route
@@ -105,9 +93,7 @@ const App = () => {
         <Route
           path='/contact'
           element={
-            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-              <ContactUs />
-            </CheckAuth>
+            <ContactUs />
           }
         />
       </Route>
