@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react'
+
 export interface Product {
     id: string;
     name: string;
@@ -29,4 +31,14 @@ export interface Links {
 export interface Shop{
     img: string;
     title: string;
+}
+
+export interface ProductImageUploadProps {
+  imageFile: { name: string };
+  handleSetImageFile:  Dispatch<SetStateAction<string | {   name: string } | null>>;
+  imageLoadingState: boolean;
+    handleSetUploadedImageUrl: string;
+    handleSetImageLoadingState: ()=>void;
+  isEditMode: boolean;
+  isCustomStyling: boolean;
 }
