@@ -16,6 +16,9 @@ import { useEffect } from 'react'
 import { checkAuth } from '@/store/auth-slice'
 
 import { useDispatch, useSelector } from 'react-redux'
+import Admin from '@/layouts/Admin.tsx'
+import AdminDashboard from '@/pages/admin-pages/dashboard.tsx'
+import AdminProducts from '@/pages/admin-pages/products.tsx'
 const App = () => {
   const { user, isAuthenticated, isLoading } = useSelector(
     (state) => state.auth
@@ -95,6 +98,12 @@ const App = () => {
           }
         />
       </Route>
+
+      <Route path='/admin' element={<Admin />}>
+        <Route index element={<AdminDashboard />} />
+        <Route path='products' element={<AdminProducts />} />
+      </Route>
+
       <Route path='*' element={<PageNotFound />} />
     </Routes>
   )

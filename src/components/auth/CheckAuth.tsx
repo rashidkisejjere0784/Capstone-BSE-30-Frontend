@@ -17,7 +17,7 @@ function CheckAuth({ isAuthenticated, user, children }: Props) {
       return <Navigate to="/auth" />;
     } else {
       if (user?.role === "admin") {
-        return <Navigate to="/admin/dashboard" />;
+        return <Navigate to="/admin" />;
       } else {
         return <Navigate to="/" />;
       }
@@ -38,7 +38,7 @@ function CheckAuth({ isAuthenticated, user, children }: Props) {
     (location.pathname.includes("/auth"))
   ) {
     if (user?.role === "admin") {
-      return <Navigate to="/admin/dashboard" />;
+      return <Navigate to="/admin" />;
     } else {
       return <Navigate to="/" />;
     }
@@ -57,7 +57,7 @@ function CheckAuth({ isAuthenticated, user, children }: Props) {
     user?.role === "admin" &&
     location.pathname.includes("/")
   ) {
-    return <Navigate to="/admin/dashboard" />;
+    return <Navigate to="/admin" />;
   }
 
   return <>{children}</>;
