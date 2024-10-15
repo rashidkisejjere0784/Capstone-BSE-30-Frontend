@@ -29,8 +29,6 @@ const App = () => {
 
   if (isLoading) return <p>Page Loading</p>
 
-  console.log(isLoading, user)
-
   return (
     <Routes>
       <Route path='/' element={<Base />}>
