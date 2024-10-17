@@ -23,12 +23,11 @@ import { useToast } from '@/hooks/use-toast.ts'
 
 const initialFormData = {
   image: null,
-  title: '',
+  name: '',
   description: '',
   category: '',
   brand: '',
   price: '',
-  salePrice: '',
   totalStock: '',
   averageReview: 0
 }
@@ -42,9 +41,13 @@ function AdminProducts () {
   const [imageLoadingState, setImageLoadingState] = useState(false)
   const [currentEditedId, setCurrentEditedId] = useState(null)
 
-  // const { productList } = useSelector((state) => state.adminProducts)
+  const { productList } = useSelector((state) => state.adminProducts)
   const dispatch = useDispatch()
   const { toast } = useToast()
+
+  useEffect(() => {
+    dispatch(fetchAllProducts())
+  }, [dispatch])
 
   function onSubmit (event) {
     event.preventDefault()
@@ -82,27 +85,21 @@ function AdminProducts () {
         }
       })
   }
-
-  // function handleDelete (getCurrentProductId) {
-  //   dispatch(deleteProduct(getCurrentProductId)).then((data) => {
-  //     if (data?.payload?.success) {
-  //       dispatch(fetchAllProducts())
-  //     }
-  //   })
-  // }
-
-  function isFormValid () {
-    return Object.keys(formData)
-      .filter((currentKey) => currentKey !== 'averageReview')
-      .map((key) => formData[key] !== '')
-      .every((item) => item)
+console.log("Form Data: ", formData)
+  function handleDelete (getCurrentProductId) {
+    dispatch(deleteProduct(getCurrentProductId)).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchAllProducts())
+      }
+    })
   }
 
-  useEffect(() => {
-    dispatch(fetchAllProducts())
-  }, [dispatch])
-
-  console.log(formData, 'productList')
+  // function isFormValid () {
+  //   return Object.keys(formData)
+  //     .filter((currentKey) => currentKey !== 'averageReview')
+  //     .map((key) => formData[key] !== '')
+  //     .every((item) => item)
+  // }
 
   return (
     <>
@@ -112,19 +109,19 @@ function AdminProducts () {
         </Button>
       </div>
       <div className='grid gap-4 md:grid-cols-3 lg:grid-cols-4'>
-        {/*{productList && productList.length > 0*/}
-        {/*  ? productList.map((productItem) => (*/}
-        {/*    <AdminProductTile*/}
-        {/*      key={productItem}*/}
-        {/*      setFormData={setFormData}*/}
-        {/*      setOpenCreateProductsDialog={setOpenCreateProductsDialog}*/}
-        {/*      setCurrentEditedId={setCurrentEditedId}*/}
-        {/*      product={productItem}*/}
-        {/*      handleDelete={handleDelete}*/}
-        {/*    />*/}
-        {/*  ))*/}
-        {/*  : null}*/}
-        products
+        {productList && productList.length > 0
+          ? productList.map((productItem, index) => (
+            <AdminProductTile
+              key={index}
+              setFormData={setFormData}
+              setOpenCreateProductsDialog={setOpenCreateProductsDialog}
+              setCurrentEditedId={setCurrentEditedId}
+              product={productItem}
+              handleDelete={handleDelete}
+            />
+          ))
+          : <p>No Products fetched</p>}
+
       </div>
       <Sheet
         open={openCreateProductsDialog}
@@ -156,7 +153,7 @@ function AdminProducts () {
               setFormData={setFormData}
               buttonText={currentEditedId !== null ? 'Edit' : 'Add'}
               formControls={addProductFormElements}
-              isBtnDisabled={!isFormValid()}
+              // isBtnDisabled={!isFormValid()}
             />
           </div>
         </SheetContent>

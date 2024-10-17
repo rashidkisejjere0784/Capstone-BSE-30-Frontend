@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Admin from '@/layouts/Admin.tsx'
 import AdminDashboard from '@/pages/admin-pages/dashboard.tsx'
 import AdminProducts from '@/pages/admin-pages/products.tsx'
+import AdminCategories from '@/pages/admin-pages/categories.tsx'
 const App = () => {
   const { user, isAuthenticated, isLoading } = useSelector(
     (state) => state.auth
@@ -102,6 +103,7 @@ const App = () => {
       <Route path='/admin' element={<Admin />}>
         <Route index element={<AdminDashboard />} />
         <Route path='products' element={<AdminProducts />} />
+        <Route path='categories' element={<AdminCategories />} />
       </Route>
 
       <Route path='*' element={<PageNotFound />} />

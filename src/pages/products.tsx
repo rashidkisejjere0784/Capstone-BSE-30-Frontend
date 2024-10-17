@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import { useEffect, useState } from 'react'
 import { Slider } from '@/components/ui/slider'
-import { popularTags, products } from '@/assets/data.ts'
+import { popularTags } from '@/assets/data.ts'
 import watch from '/images/smart-watches.png'
 import SearchInput from '@/components/SearchInput.tsx'
 import ProductCard from '@/components/ProductCard.tsx'
@@ -63,16 +63,13 @@ const Products = () => {
   const [selectedPrice, setSelectedPrice] = useState('')
   const [checkedBrands, setCheckedBrands] = useState<string[]>([])
 
-  const { productList, isLoading } = useSelector((state) => state.shopProducts)
+  const { productList } = useSelector((state) => state.shopProducts)
   const dispatch = useDispatch()
   useEffect(() => {
     // @ts-ignore
     dispatch(fetchAllProducts())
   }, [dispatch])
-  console.log(productList, isLoading)
-    for(let i = 0; i < 5; i++){
-        console.log("Product Name: ", productList[0])
-    }
+
 
 
   const handleBrandChange = (brand: string) => {

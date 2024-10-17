@@ -3,9 +3,12 @@ import axios from 'axios'
 
 const initialState = {
   isLoading: false,
-  featureImageList: []
+  featureImageList: [],
+  categoryList: []
 }
+const SERVER = import.meta.env.VITE_LOCAL_SERVER
 
+const ALL_CATEGORY_API = `${SERVER}category/all`
 export const getFeatureImages = createAsyncThunk(
   '/order/getFeatureImages',
   async () => {
@@ -13,6 +16,16 @@ export const getFeatureImages = createAsyncThunk(
       'http://localhost:5000/api/common/feature/get'
     )
 
+    return response.data
+  }
+)
+
+export const getCategoryItems = createAsyncThunk(
+  '/order/getCategoryItems',
+  async () => {
+    const response = await axios.get(
+      ALL_CATEGORY_API
+    )
     return response.data
   }
 )
@@ -45,6 +58,14 @@ const commonSlice = createSlice({
       .addCase(getFeatureImages.rejected, (state) => {
         state.isLoading = false
         state.featureImageList = []
+      }).addCase(getCategoryItems.pending, (state) => {
+        state.isLoading = true
+      }).addCase(getCategoryItems.rejected, (state) => {
+        state.isLoading = false
+        state.categoryList = []
+      }).addCase(getCategoryItems.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.categoryList = action.payload
       })
   }
 })

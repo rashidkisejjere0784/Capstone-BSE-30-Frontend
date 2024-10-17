@@ -2,13 +2,31 @@ import { AlignJustify, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useDispatch } from 'react-redux'
 import { logoutUser } from '@/store/auth-slice'
+import { toast } from '@/hooks/use-toast.ts'
 
 function AdminHeader ({ handleOpenSideBar }: {handleOpenSideBar: ()=> void}) {
   const dispatch = useDispatch()
 
-  function handleLogout () {
+  const handleLogout = (e: { preventDefault: () => void }) => {
+    e.preventDefault()
     // @ts-ignore
-    dispatch(logoutUser())
+    dispatch(logoutUser()).then((data)=>{
+      if (data?.payload?.success) {
+        toast({
+          title: data?.payload?.message,
+          description: 'User Logout Successfully',
+          variant: 'success'
+        })
+
+      } else {
+        toast({
+          title: data?.payload?.message,
+          description: 'Failed to Logout User',
+          variant: 'destructive'
+        })
+      }
+    })
+
   }
 
   return (

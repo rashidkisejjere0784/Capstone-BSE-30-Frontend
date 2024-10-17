@@ -41,17 +41,23 @@ export const loginFormControls = [
 
 export const addProductFormElements = [
   {
-    label: 'Title',
-    name: 'title',
+    label: 'Name',
+    name: 'name',
     componentType: 'input',
     type: 'text',
-    placeholder: 'Enter product title'
+    placeholder: 'Enter product name'
   },
   {
     label: 'Description',
     name: 'description',
     componentType: 'textarea',
     placeholder: 'Enter product description'
+  },
+  {
+    label: 'Discount',
+    name: 'discount',
+    componentType: 'input',
+    placeholder: 'Enter product discount'
   },
   {
     label: 'Category',
@@ -63,6 +69,27 @@ export const addProductFormElements = [
       { id: 'kids', label: 'Kids' },
       { id: 'accessories', label: 'Accessories' },
       { id: 'footwear', label: 'Footwear' }
+    ]
+  },
+  {
+    label: 'Availability',
+    name: 'availability',
+    componentType: 'select',
+    options: [
+      { id: true, label: 'True' },
+      { id: false, label: 'False' }
+    ]
+  },
+  {
+    label: 'Colors',
+    name: 'colors',
+    componentType: 'select',
+    options: [
+      { id: 'red', label: 'Red' },
+      { id: 'yellow', label: 'Yellow' },
+      { id: 'green', label: 'Green' },
+      { id: 'blue', label: 'Blue' },
+      { id: 'white', label: 'White' }
     ]
   },
   {
@@ -84,13 +111,6 @@ export const addProductFormElements = [
     componentType: 'input',
     type: 'number',
     placeholder: 'Enter product price'
-  },
-  {
-    label: 'Sale Price',
-    name: 'salePrice',
-    componentType: 'input',
-    type: 'number',
-    placeholder: 'Enter sale price (optional)'
   },
   {
     label: 'Total Stock',
