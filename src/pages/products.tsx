@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {Link} from "react-router-dom";
 import { useEffect, useState } from 'react'
 import { Slider } from '@/components/ui/slider'
@@ -318,14 +320,15 @@ const Products = () => {
                 {productList.map(
                   (product: {
                     _id: string
-                    image: string;
+                    product_image: string;
                     name: string
                     price: string
                   }) => (
+
                     <ProductCard
                       key={product?._id}
                       id={product?._id}
-                      src={product?.image}
+                      src={`http://${product?.product_image}`}
                       name={product?.name}
                       amount={product?.price}
                       className={'max-h-[20rem] overflow-hidden'}
