@@ -46,7 +46,9 @@ function AdminProducts () {
   const { toast } = useToast()
 
   useEffect(() => {
-    dispatch(fetchAllProducts())
+    dispatch(fetchAllProducts()).then((data)=>{
+      console.log(data)
+    })
   }, [dispatch])
 
   function onSubmit (event) {
@@ -85,7 +87,7 @@ function AdminProducts () {
         }
       })
   }
-console.log("Form Data: ", formData)
+
   function handleDelete (getCurrentProductId) {
     dispatch(deleteProduct(getCurrentProductId)).then((data) => {
       if (data?.payload?.success) {
