@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import { MdOutlineCategory } from 'react-icons/md'
 
 const adminSidebarMenuItems = [
   {
@@ -25,10 +26,22 @@ const adminSidebarMenuItems = [
     label: 'Orders',
     path: '/admin/orders',
     icon: <BadgeCheck />
+  },
+  {
+    id: 'categories',
+    label: 'Categories',
+    path: '/admin/categories',
+    icon: <MdOutlineCategory />
+  },
+  {
+    id: 'brands',
+    label: 'Brands',
+    path: '/admin/brands',
+    icon: <MdOutlineCategory />
   }
 ]
 
-function MenuItems ({ handleOpenSideBar }: {handleOpenSideBar: ()=> void}) {
+function MenuItems () {
   const navigate = useNavigate()
 
   return (
@@ -38,7 +51,7 @@ function MenuItems ({ handleOpenSideBar }: {handleOpenSideBar: ()=> void}) {
           key={menuItem.id}
           onClick={() => {
             navigate(menuItem.path)
-            handleOpenSideBar ? handleOpenSideBar() : null
+            // handleOpenSideBar ? handleOpenSideBar() : null
           }}
           className='flex cursor-pointer text-xl items-center gap-2 rounded-md px-3 py-2 text-muted-foreground hover:bg-muted hover:text-foreground'
         >
@@ -64,7 +77,7 @@ function AdminSideBar ({ open, handleOpenSideBar }: {open: boolean; handleOpenSi
                 <h1 className='text-2xl font-extrabold'>Admin Panel</h1>
               </SheetTitle>
             </SheetHeader>
-            <MenuItems handleOpenSideBar={handleOpenSideBar} />
+            <MenuItems />
           </div>
         </SheetContent>
       </Sheet>
@@ -76,7 +89,7 @@ function AdminSideBar ({ open, handleOpenSideBar }: {open: boolean; handleOpenSi
           <ChartNoAxesCombined size={30} />
           <h1 className='text-2xl font-extrabold'>Admin Panel</h1>
         </div>
-        <MenuItems  handleOpenSideBar={handleOpenSideBar}/>
+        <MenuItems />
       </aside>
     </>
   )
