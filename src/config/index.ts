@@ -132,7 +132,22 @@ export const addCategoryFormElements = [
     label: 'Description',
     name: 'description',
     componentType: 'textarea',
-    placeholder: 'Enter product description'
+    placeholder: 'Enter brand description'
+  }
+]
+export const addBrandFormElements = [
+  {
+    label: 'Name',
+    name: 'name',
+    componentType: 'input',
+    type: 'text',
+    placeholder: 'Enter brand name'
+  },
+  {
+    label: 'Description',
+    name: 'description',
+    componentType: 'textarea',
+    placeholder: 'Enter brand description'
   }
 ]
 

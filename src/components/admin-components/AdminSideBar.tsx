@@ -32,6 +32,12 @@ const adminSidebarMenuItems = [
     label: 'Categories',
     path: '/admin/categories',
     icon: <MdOutlineCategory />
+  },
+  {
+    id: 'brands',
+    label: 'Brands',
+    path: '/admin/brands',
+    icon: <MdOutlineCategory />
   }
 ]
 
@@ -71,7 +77,7 @@ function AdminSideBar ({ open, handleOpenSideBar }: {open: boolean; handleOpenSi
                 <h1 className='text-2xl font-extrabold'>Admin Panel</h1>
               </SheetTitle>
             </SheetHeader>
-            <MenuItems handleOpenSideBar={handleOpenSideBar} />
+            <MenuItems />
           </div>
         </SheetContent>
       </Sheet>
@@ -83,7 +89,7 @@ function AdminSideBar ({ open, handleOpenSideBar }: {open: boolean; handleOpenSi
           <ChartNoAxesCombined size={30} />
           <h1 className='text-2xl font-extrabold'>Admin Panel</h1>
         </div>
-        <MenuItems  handleOpenSideBar={handleOpenSideBar}/>
+        <MenuItems />
       </aside>
     </>
   )

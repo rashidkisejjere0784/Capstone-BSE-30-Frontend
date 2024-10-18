@@ -3,6 +3,7 @@
 import { Button } from '../ui/button'
 import { Card, CardContent, CardFooter } from '../ui/card'
 
+
 function AdminProductTile ({
   product,
   setFormData,
@@ -10,13 +11,13 @@ function AdminProductTile ({
   setCurrentEditedId,
   handleDelete
 }) {
-  console.log('Product Image: ', product?.product_image)
+  const productImage = `http://${product?.product_image}`
   return (
     <Card className='w-full max-w-sm mx-auto'>
       <div>
         <div className='relative'>
           <img
-            src={product?.product_image}
+            src={productImage}
             alt={product?.name}
             className='w-full h-[300px] object-cover rounded-t-lg'
           />
