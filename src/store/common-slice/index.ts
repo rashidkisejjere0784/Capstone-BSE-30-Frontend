@@ -10,6 +10,8 @@ const SERVER = import.meta.env.VITE_LOCAL_SERVER
 
 const ALL_CATEGORY_API = `${SERVER}category/all`
 const DELETE_CATEGORY_API = `${SERVER}category/delete`
+const ADD_CATEGORY_API = `${SERVER}category/add`
+const EDIT_CATEGORY_API = `${SERVER}category/edit`
 export const getFeatureImages = createAsyncThunk(
   '/order/getFeatureImages',
   async () => {
@@ -26,6 +28,31 @@ export const getCategoryItems = createAsyncThunk(
   async () => {
     const response = await axios.get(
       ALL_CATEGORY_API
+    )
+    return response.data
+  }
+)
+
+export const addCategoryItem = createAsyncThunk(
+  '/order/deleteCategoryItem',
+  async (data) => {
+    const response = await axios.post(
+      ADD_CATEGORY_API, data, {
+        withCredentials: true
+      }
+    )
+    return response.data
+  }
+)
+
+
+export const editCategoryItem = createAsyncThunk(
+  '/order/deleteCategoryItem',
+  async (data) => {
+    const response = await axios.post(
+      EDIT_CATEGORY_API, data, {
+        withCredentials: true
+      }
     )
     return response.data
   }

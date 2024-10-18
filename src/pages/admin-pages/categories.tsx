@@ -8,7 +8,7 @@ import {
   SheetHeader,
   SheetTitle
 } from '@/components/ui/sheet'
-import { addProductFormElements } from '@/config'
+import { addCategoryFormElements } from '@/config'
 
 import { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -36,9 +36,7 @@ import {
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
 
-import { deleteCategoryItem, getCategoryItems } from '@/store/common-slice'
-import { logoutUser } from '@/store/auth-slice'
-import { getCookie } from '@/assets/utils.ts'
+import { addCategoryItem, deleteCategoryItem, editCategoryItem, getCategoryItems } from '@/store/common-slice'
 
 const initialFormData = {
   name: '',
@@ -51,8 +49,6 @@ function AdminCategories () {
   const [formData, setFormData] = useState(initialFormData)
   const [currentEditedId, setCurrentEditedId] = useState(null)
   const { categoryList } = useSelector((state) => state.commonFeature)
-  const { user } = useSelector((state)=> state.auth)
-  console.log(user)
 
   const dispatch = useDispatch()
   const { toast } = useToast()
@@ -61,20 +57,78 @@ function AdminCategories () {
     dispatch(getCategoryItems())
   }, [dispatch])
 
-  function onSubmit (event) {
+  async function onSubmit (event) {
     event.preventDefault()
+
+    formData.CategoryId === '' || !formData.CategoryId
+      ? dispatch(addCategoryItem(formData)).then((data) => {
+        if (data?.payload?.success) {
+          toast({
+            title: data?.payload?.message,
+            variant: 'success'
+          })
+          setOpenCreateProductsDialog(false)
+          setCurrentEditedId(null)
+          setFormData(initialFormData)
+          dispatch(getCategoryItems())
+        } else {
+          toast({
+            title: data?.payload?.message,
+            variant: 'destructive'
+          })
+        }
+      })
+      : dispatch(editCategoryItem(formData)).then((data) => {
+        if (data?.payload?.success) {
+          toast({
+            title: data?.payload?.message,
+            variant: 'success'
+          })
+          setOpenCreateProductsDialog(false)
+          setCurrentEditedId(formData.id)
+          setFormData(initialFormData)
+          dispatch(getCategoryItems())
+        } else {
+          toast({
+            title: data?.payload?.message,
+            variant: 'destructive'
+          })
+        }
+      })
   }
+
+  console.log(formData)
 
   const handleDelete = (categoryID) => {
-    dispatch(deleteCategoryItem(categoryID))
+    dispatch(deleteCategoryItem(categoryID)).then((data) => {
+      if (data?.payload?.success) {
+        toast({
+          title: data?.payload?.message,
+          variant: 'success'
+        })
+        setOpenCreateProductsDialog(false)
+        setCurrentEditedId(null)
+        setFormData(initialFormData)
+        dispatch(getCategoryItems())
+      } else {
+        toast({
+          title: data?.payload?.message,
+          variant: 'destructive'
+        })
+      }
+    })
   }
 
-  // function isFormValid () {
-  //   return Object.keys(formData)
-  //     .filter((currentKey) => currentKey !== 'averageReview')
-  //     .map((key) => formData[key] !== '')
-  //     .every((item) => item)
-  // }
+  const handleSetEditFormData = (CategoryId, name, description) => {
+    setOpenCreateProductsDialog(true)
+    setCurrentEditedId(CategoryId)
+    setFormData({
+      CategoryId,
+      name,
+      description
+    })
+  }
+
   return (
     <>
       <div className='mb-5 w-full flex justify-end'>
@@ -106,20 +160,29 @@ function AdminCategories () {
                       <TableCell>
                         <div className='flex items-center gap-2'>
                           <button className='py-1 px-3 bg-blue-500 text-white rounded-lg'>view</button>
-                          <button className='py-1 px-3 bg-green-500 text-white rounded-lg'>edit</button>
+                          {/* Edit Category */}
+                          <button onClick={() => handleSetEditFormData(category?._id, category?.name, category?.description)} className='py-1 px-3 bg-green-500 text-white rounded-lg'>Edit</button>
+                          {/* Add Category */}
                           <AlertDialog>
-                            <AlertDialogTrigger className='py-1 px-3 bg-red-500 text-white rounded-lg'>Delete</AlertDialogTrigger>
+                            <AlertDialogTrigger
+                              className='py-1 px-3 bg-red-500 text-white rounded-lg'
+                            >Delete
+                            </AlertDialogTrigger>
                             <AlertDialogContent>
                               <AlertDialogHeader>
                                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  This action cannot be undone. This will permanently delete your Category ({category?.name})
+                                  This action cannot be undone. This will permanently delete your Category
+                                  ({category?.name})
                                   and remove your data from our servers.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => handleDelete(category?._id)}>Continue</AlertDialogAction>
+                                <AlertDialogAction
+                                  onClick={() => handleDelete(category?._id)}
+                                >Continue
+                                </AlertDialogAction>
                               </AlertDialogFooter>
 
                             </AlertDialogContent>
@@ -129,7 +192,7 @@ function AdminCategories () {
                       </TableCell>
                     </TableRow>
                   ))
-              }
+            }
 
           </TableBody>
         </Table>
@@ -156,7 +219,7 @@ function AdminCategories () {
               formData={formData}
               setFormData={setFormData}
               buttonText={currentEditedId !== null ? 'Edit' : 'Add'}
-              formControls={addProductFormElements}
+              formControls={addCategoryFormElements}
               // isBtnDisabled={!isFormValid()}
             />
           </div>

@@ -120,6 +120,21 @@ export const addProductFormElements = [
     placeholder: 'Enter total stock'
   }
 ]
+export const addCategoryFormElements = [
+  {
+    label: 'Name',
+    name: 'name',
+    componentType: 'input',
+    type: 'text',
+    placeholder: 'Enter category name'
+  },
+  {
+    label: 'Description',
+    name: 'description',
+    componentType: 'textarea',
+    placeholder: 'Enter product description'
+  }
+]
 
 export const shoppingViewHeaderMenuItems = [
   {
