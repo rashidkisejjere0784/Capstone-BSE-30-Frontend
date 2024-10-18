@@ -23,7 +23,22 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { getCategoryItems } from '@/store/common-slice'
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from '@/components/ui/alert-dialog'
+
+import { deleteCategoryItem, getCategoryItems } from '@/store/common-slice'
+import { logoutUser } from '@/store/auth-slice'
+import { getCookie } from '@/assets/utils.ts'
 
 const initialFormData = {
   name: '',
@@ -36,8 +51,8 @@ function AdminCategories () {
   const [formData, setFormData] = useState(initialFormData)
   const [currentEditedId, setCurrentEditedId] = useState(null)
   const { categoryList } = useSelector((state) => state.commonFeature)
-
-  console.log('CategoryList: ', categoryList)
+  const { user } = useSelector((state)=> state.auth)
+  console.log(user)
 
   const dispatch = useDispatch()
   const { toast } = useToast()
@@ -50,8 +65,8 @@ function AdminCategories () {
     event.preventDefault()
   }
 
-  function handleDelete () {
-
+  const handleDelete = (categoryID) => {
+    dispatch(deleteCategoryItem(categoryID))
   }
 
   // function isFormValid () {
@@ -60,7 +75,6 @@ function AdminCategories () {
   //     .map((key) => formData[key] !== '')
   //     .every((item) => item)
   // }
-
   return (
     <>
       <div className='mb-5 w-full flex justify-end'>
@@ -82,25 +96,39 @@ function AdminCategories () {
           <TableBody>
 
             {
-                categoryList.length > 0
-                  ? categoryList.map((category) => (
+                categoryList.length > 0 &&
+                  categoryList.map((category) => (
                     // eslint-disable-next-line react/jsx-key
-                    <>
-                      <TableRow>
-                        <TableCell>{category?._id}</TableCell>
-                        <TableCell>{category?.name}</TableCell>
-                        <TableCell>{category?.description}</TableCell>
-                        <TableCell>
-                          <div className='flex items-center gap-2'>
-                            <button className='py-1 px-3 bg-blue-500 text-white rounded-lg'>view</button>
-                            <button className='py-1 px-3 bg-green-500 text-white rounded-lg'>edit</button>
-                            <button className='py-1 px-3 bg-red-500 text-white rounded-lg'>delete</button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    </>
+                    <TableRow key={category?._id}>
+                      <TableCell>{category?._id}</TableCell>
+                      <TableCell>{category?.name}</TableCell>
+                      <TableCell>{category?.description}</TableCell>
+                      <TableCell>
+                        <div className='flex items-center gap-2'>
+                          <button className='py-1 px-3 bg-blue-500 text-white rounded-lg'>view</button>
+                          <button className='py-1 px-3 bg-green-500 text-white rounded-lg'>edit</button>
+                          <AlertDialog>
+                            <AlertDialogTrigger className='py-1 px-3 bg-red-500 text-white rounded-lg'>Delete</AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will permanently delete your Category ({category?.name})
+                                  and remove your data from our servers.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDelete(category?._id)}>Continue</AlertDialogAction>
+                              </AlertDialogFooter>
+
+                            </AlertDialogContent>
+                          </AlertDialog>
+
+                        </div>
+                      </TableCell>
+                    </TableRow>
                   ))
-                  : <p>Failed to get category items</p>
               }
 
           </TableBody>

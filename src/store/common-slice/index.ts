@@ -9,6 +9,7 @@ const initialState = {
 const SERVER = import.meta.env.VITE_LOCAL_SERVER
 
 const ALL_CATEGORY_API = `${SERVER}category/all`
+const DELETE_CATEGORY_API = `${SERVER}category/delete`
 export const getFeatureImages = createAsyncThunk(
   '/order/getFeatureImages',
   async () => {
@@ -25,6 +26,21 @@ export const getCategoryItems = createAsyncThunk(
   async () => {
     const response = await axios.get(
       ALL_CATEGORY_API
+    )
+    return response.data
+  }
+)
+
+export const deleteCategoryItem = createAsyncThunk(
+  '/order/deleteCategoryItem',
+  async (categoryID) => {
+    const obj = {
+      CategoryId: categoryID
+    }
+    const response = await axios.post(
+      DELETE_CATEGORY_API, obj, {
+        withCredentials: true
+      }
     )
     return response.data
   }
@@ -64,6 +80,9 @@ const commonSlice = createSlice({
         state.isLoading = false
         state.categoryList = []
       }).addCase(getCategoryItems.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.categoryList = action.payload
+      }).addCase(deleteCategoryItem.fulfilled, (state, action) => {
         state.isLoading = false
         state.categoryList = action.payload
       })
