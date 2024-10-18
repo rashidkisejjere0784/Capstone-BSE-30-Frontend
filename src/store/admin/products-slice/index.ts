@@ -24,7 +24,9 @@ export const addNewProduct = createAsyncThunk(
   async (formData) => {
     const result = await axios.post(
       ADD_NEW_PRODUCT_API,
-      formData
+      formData,{
+        withCredentials: true
+      }
     )
 
     return result?.data

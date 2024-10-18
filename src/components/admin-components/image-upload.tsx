@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 
 import { FileIcon, UploadCloudIcon, XIcon } from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import axios from 'axios'
 import { Skeleton } from '@/components/ui/skeleton'
 
+const IMAGE_UPLOAD_ROUTE = 'http://localhost:5000/api/product-images/add'
 const ProductImageUpload = ({
   imageFile,
   setImageFile,
@@ -20,14 +21,21 @@ const ProductImageUpload = ({
 }) => {
   const inputRef = useRef(null)
 
-  console.log(isEditMode, 'isEditMode')
-
   function handleImageFileChange (event) {
-    console.log(event.target.files, 'event.target.files')
+    // console.log(event.target.files, 'event.target.files')
     const selectedFile = event.target.files?.[0]
-    console.log(selectedFile)
+    // const blob = URL.createObjectURL(selectedFile)
 
-    if (selectedFile) setImageFile(selectedFile)
+    if (selectedFile) {
+      const fileReader: FileReader = new FileReader()
+      fileReader.onload = (e) => {
+        const base64String = e.target.result;
+        console.log('Base64 Image String:', base64String);
+      }
+      fileReader.readAsDataURL(selectedFile)
+      // setImageFile(blob)
+      // console.log('The selected Image: ', blob)
+    }
   }
 
   function handleDragOver (event) {
@@ -47,25 +55,32 @@ const ProductImageUpload = ({
     }
   }
 
-  async function uploadImageToCloudinary () {
+  async function uploadImage () {
     setImageLoadingState(true)
     const data = new FormData()
+    console.log('Form Data: ', data)
     data.append('my_file', imageFile)
-    const response = await axios.post(
-      'http://localhost:5000/api/admin/products/upload-image',
-      data
-    )
-    console.log(response, 'response')
-
-    if (response?.data?.success) {
-      setUploadedImageUrl(response.data.result.url)
-      setImageLoadingState(false)
-    }
+    console.log('Image File: ', imageFile.name)
+    // const response = await axios.post(
+    //   IMAGE_UPLOAD_ROUTE,
+    //   {
+    //     file: imageFile
+    //   },
+    //   {
+    //     withCredentials: true
+    //   }
+    // )
+    // console.log(response, 'response')
+    //
+    // if (response?.data?.success) {
+    //   setUploadedImageUrl(response.data.result.url)
+    //   setImageLoadingState(false)
+    // }
   }
 
-  useEffect(() => {
-    if (imageFile !== null) uploadImageToCloudinary()
-  }, [imageFile])
+  // useEffect(() => {
+  //   if (imageFile !== null) uploadImage()
+  // }, [imageFile])
 
   return (
     <div

@@ -1,5 +1,4 @@
 import {
-  BadgeCheck,
   ChartNoAxesCombined,
   LayoutDashboard,
   ShoppingBasket
@@ -7,6 +6,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { MdOutlineCategory } from 'react-icons/md'
+import { SiBrandfolder } from 'react-icons/si'
 
 const adminSidebarMenuItems = [
   {
@@ -22,12 +22,6 @@ const adminSidebarMenuItems = [
     icon: <ShoppingBasket />
   },
   {
-    id: 'orders',
-    label: 'Orders',
-    path: '/admin/orders',
-    icon: <BadgeCheck />
-  },
-  {
     id: 'categories',
     label: 'Categories',
     path: '/admin/categories',
@@ -37,7 +31,7 @@ const adminSidebarMenuItems = [
     id: 'brands',
     label: 'Brands',
     path: '/admin/brands',
-    icon: <MdOutlineCategory />
+    icon: <SiBrandfolder />
   }
 ]
 
