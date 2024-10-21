@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
-import { boolean, z } from 'zod'
+import { z } from 'zod'
 
 export interface Product {
     id: string;
@@ -53,5 +53,5 @@ export const productFormSchema = z.object({
   quantity: z.string(),
   brandId: z.string(),
   colors: z.string(),
-  rating: z.string().max(1).min(0),
+  rating: z.string(),
 })

@@ -57,11 +57,12 @@ const AuthPage = () => {
     // @ts-ignore
     dispatch(loginUser(logInForm)).then((data) => {
       if (data?.payload?.success) {
+        console.log('Token: ', data?.payload?.token)
         toast({
           title: data?.payload?.message,
           variant: "success"
         });
-        navigate("/")
+        
       } else {
         toast({
           title: data?.payload?.message,

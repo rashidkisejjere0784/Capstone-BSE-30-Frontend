@@ -3,10 +3,11 @@ import { Button } from '@/components/ui/button'
 import { useDispatch } from 'react-redux'
 import { logoutUser } from '@/store/auth-slice'
 import { toast } from '@/hooks/use-toast.ts'
+import { useNavigate } from 'react-router-dom'
 
 function AdminHeader ({ handleOpenSideBar }: {handleOpenSideBar: ()=> void}) {
   const dispatch = useDispatch()
-
+  const navigate = useNavigate()
   const handleLogout = (e: { preventDefault: () => void }) => {
     e.preventDefault()
     // @ts-ignore
@@ -17,6 +18,7 @@ function AdminHeader ({ handleOpenSideBar }: {handleOpenSideBar: ()=> void}) {
           description: 'User Logout Successfully',
           variant: 'success'
         })
+        navigate('/')
 
       } else {
         toast({

@@ -18,7 +18,7 @@ const ALL_BRAND_API = `${SERVER}brand/all`
 const DELETE_BRAND_API = `${SERVER}brand/delete`
 const ADD_BRAND_API = `${SERVER}brand/add`
 const EDIT_BRAND_API = `${SERVER}brand/edit`
-
+const token = localStorage.getItem('token')
 export const getCategoryItems = createAsyncThunk(
   '/order/getCategoryItems',
   async () => {
@@ -34,7 +34,10 @@ export const addCategoryItem = createAsyncThunk(
   async (data) => {
     const response = await axios.post(
       ADD_CATEGORY_API, data, {
-        withCredentials: true
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
     )
     return response.data
@@ -46,7 +49,10 @@ export const editCategoryItem = createAsyncThunk(
   async (data) => {
     const response = await axios.post(
       EDIT_CATEGORY_API, data, {
-        withCredentials: true
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
     )
     return response.data
@@ -61,7 +67,10 @@ export const deleteCategoryItem = createAsyncThunk(
     }
     const response = await axios.post(
       DELETE_CATEGORY_API, obj, {
-        withCredentials: true
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
     )
     return response.data
@@ -83,7 +92,10 @@ export const addBrandItem = createAsyncThunk(
   async (data) => {
     const response = await axios.post(
       ADD_BRAND_API, data, {
-        withCredentials: true
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
     )
     return response.data
@@ -95,7 +107,10 @@ export const editBrandItem = createAsyncThunk(
   async (data) => {
     const response = await axios.post(
       EDIT_BRAND_API, data, {
-        withCredentials: true
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
     )
     return response.data
@@ -110,13 +125,15 @@ export const deleteBrandItem = createAsyncThunk(
     }
     const response = await axios.post(
       DELETE_BRAND_API, obj, {
-        withCredentials: true
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
     )
     return response.data
   }
 )
-
 
 const commonSlice = createSlice({
   name: 'commonSlice',
