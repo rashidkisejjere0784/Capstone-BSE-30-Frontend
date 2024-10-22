@@ -18,6 +18,8 @@ import {
 } from '@/components/ui/pagination.tsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchAllProducts } from '@/store/shop/products-slice'
+import { addWishListItem } from '@/store/shop/wishlist-slice'
+import { toast } from '@/hooks/use-toast.ts'
 
 const Categories = [
   'Electronic Devices',
@@ -72,7 +74,24 @@ const Products = () => {
     dispatch(fetchAllProducts())
   }, [dispatch])
 
+  const handleAddToWishList = (productId)=>{
+    dispatch(addWishListItem(productId)).then((data)=>{
+      if(data?.payload?.success){
+        toast({
+          title: "Product Added to Wishlist Successfully",
+          description: data?.payload?.message,
+          variant: 'success'
+        })
+      }else{
+        toast({
+          title: "Failed to add Product to Wishlist",
+          description: data?.payload?.message,
+          variant: 'destructive'
+        })
+      }
 
+    })
+  }
 
   const handleBrandChange = (brand: string) => {
     setCheckedBrands((prev) =>
@@ -328,6 +347,7 @@ const Products = () => {
                     <ProductCard
                       key={product?._id}
                       id={product?._id}
+                      handleAddToWishList={handleAddToWishList}
                       src={`http://${product?.product_image}`}
                       name={product?.name}
                       amount={product?.price}

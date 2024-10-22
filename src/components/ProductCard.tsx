@@ -6,11 +6,12 @@ interface Props {
     name: string;
     className?: string;
     id: string;
+    handleAddToWishList?: (id: string)=>void
 }
 import {FaRegHeart, FaStar} from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import {LuEye} from "react-icons/lu";
-const ProductCard = ({id, src, amount, name, className}:Props)=>{
+const ProductCard = ({id, src, amount, name, handleAddToWishList, className}:Props)=>{
     return (
         <>
             <div
@@ -47,7 +48,7 @@ const ProductCard = ({id, src, amount, name, className}:Props)=>{
                     <div className={"absolute bg-black/20 top-0 bottom-0 left-0 right-0 z-[-99] opacity-0 group-hover:opacity-100 group-hover:z-[99] duration-300"}>
                         <div className={"h-full w-full flex items-center justify-center"}>
                             <div className={"flex gap-2 items-center"}>
-                                <button className={"bg-white rounded-full p-3 center-item hover:bg-primary-500 hover:text-white duration-300"}>
+                                <button onClick={()=> handleAddToWishList ? handleAddToWishList(id) : ''} className={"bg-white rounded-full p-3 center-item hover:bg-primary-500 hover:text-white duration-300"}>
                                     <FaRegHeart className={"text-lg"}/>
                                 </button>
                                 <button
