@@ -2,11 +2,17 @@
 
 import { Button } from '../ui/button'
 import { Card, CardContent, CardFooter } from '../ui/card'
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  AlertDialogHeader, AlertDialogTitle,
+  AlertDialogTrigger
+} from '@/components/ui/alert-dialog.tsx'
 
 
 function AdminProductTile ({
   product,
-  setFormData,
+  handleEdit,
   setOpenCreateProductsDialog,
   setCurrentEditedId,
   handleDelete
@@ -37,12 +43,38 @@ function AdminProductTile ({
             onClick={() => {
               setOpenCreateProductsDialog(true)
               setCurrentEditedId(product?._id)
-              setFormData(product)
+              handleEdit(product?._id)
             }}
           >
             Edit
           </Button>
-          <Button onClick={() => handleDelete(product?._id)}>Delete</Button>
+
+
+          <AlertDialog>
+            <AlertDialogTrigger
+              className='py-1 px-3 bg-red-500 text-white rounded-lg'
+            >Delete
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete your Category
+                  ({product?.name})
+                  and remove your data from our servers.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => handleDelete(product?._id)}
+                >Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+
+            </AlertDialogContent>
+          </AlertDialog>
+
         </CardFooter>
       </div>
     </Card>

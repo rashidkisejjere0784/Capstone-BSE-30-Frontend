@@ -1,6 +1,6 @@
 interface Props{
-    price: string;
-    discount?: string;
+    price: number;
+    discount?: number;
     discountPosition?: string;
     priceColor?: string;
     className?: string;
@@ -20,13 +20,13 @@ const Discount = ({price, discount, discountPosition, priceColor = "text-gray-30
         <>
             <div className={`${className} my-4 flex gap-2 items-center font-bold`}>
                 {
-                    discount !== "" && discountPosition === "left" ? <p className={`text-gray-300 line-through font-medium`}>{discount}</p> : ""
+                    discount !== 0 && discountPosition === "left" ? <p className={`text-gray-300 line-through font-medium`}>SHS {discount}</p> : ""
                 }
 
-                    <p className={`${priceColor} text-base`}>{price}</p>
+                    <p className={`${priceColor} text-base`}>SHS {price}</p>
                 {
-                    discount !== "" && discountPosition === "right"?
-                        <p className={`text-gray-300 line-through font-medium`}>{discount}</p> : ""
+                    discount !== 0 && discountPosition === "right"?
+                        <p className={`text-gray-300 line-through font-medium`}>SHS {discount}</p> : ""
                 }
             </div>
         </>
