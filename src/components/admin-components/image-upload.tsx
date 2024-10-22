@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 
 import { FileIcon, UploadCloudIcon, XIcon } from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -8,26 +8,22 @@ import { Button } from '@/components/ui/button'
 import axios from 'axios'
 import { Skeleton } from '@/components/ui/skeleton'
 
+const IMAGE_UPLOAD_ROUTE = 'http://localhost:5000/api/product-images/add'
 const ProductImageUpload = ({
   imageFile,
   setImageFile,
   imageLoadingState,
-  uploadedImageUrl,
-  setUploadedImageUrl,
   setImageLoadingState,
-  isEditMode,
   isCustomStyling = false
 }) => {
   const inputRef = useRef(null)
 
-  console.log(isEditMode, 'isEditMode')
-
   function handleImageFileChange (event) {
-    console.log(event.target.files, 'event.target.files')
     const selectedFile = event.target.files?.[0]
-    console.log(selectedFile)
-
-    if (selectedFile) setImageFile(selectedFile)
+    if (selectedFile) {
+      setImageFile(selectedFile.name)
+      console.log(selectedFile.name)
+    }
   }
 
   function handleDragOver (event) {
@@ -47,25 +43,32 @@ const ProductImageUpload = ({
     }
   }
 
-  async function uploadImageToCloudinary () {
+  async function uploadImage () {
     setImageLoadingState(true)
     const data = new FormData()
+    console.log('Form Data: ', data)
     data.append('my_file', imageFile)
-    const response = await axios.post(
-      'http://localhost:5000/api/admin/products/upload-image',
-      data
-    )
-    console.log(response, 'response')
-
-    if (response?.data?.success) {
-      setUploadedImageUrl(response.data.result.url)
-      setImageLoadingState(false)
-    }
+    console.log('Image File: ', imageFile.name)
+    // const response = await axios.post(
+    //   IMAGE_UPLOAD_ROUTE,
+    //   {
+    //     file: imageFile
+    //   },
+    //   {
+    //     withCredentials: true
+    //   }
+    // )
+    // console.log(response, 'response')
+    //
+    // if (response?.data?.success) {
+    //   setUploadedImageUrl(response.data.result.url)
+    //   setImageLoadingState(false)
+    // }
   }
 
-  useEffect(() => {
-    if (imageFile !== null) uploadImageToCloudinary()
-  }, [imageFile])
+  // useEffect(() => {
+  //   if (imageFile !== null) uploadImage()
+  // }, [imageFile])
 
   return (
     <div
@@ -75,9 +78,7 @@ const ProductImageUpload = ({
       <div
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        className={`${
-          isEditMode ? 'opacity-60' : ''
-        } border-2 border-dashed rounded-lg p-4`}
+        className='border-2 border-dashed rounded-lg p-4'
       >
         <Input
           id='image-upload'
@@ -85,15 +86,12 @@ const ProductImageUpload = ({
           className='hidden'
           ref={inputRef}
           onChange={handleImageFileChange}
-          disabled={isEditMode}
         />
         {!imageFile
           ? (
             <Label
               htmlFor='image-upload'
-              className={`${
-              isEditMode ? 'cursor-not-allowed' : ''
-            } flex flex-col items-center justify-center h-32 cursor-pointer`}
+              className='flex flex-col items-center justify-center h-32 cursor-pointer'
             >
               <UploadCloudIcon className='w-10 h-10 text-muted-foreground mb-2' />
               <span>Drag & drop or click to upload image</span>

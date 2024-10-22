@@ -102,7 +102,7 @@ const authSlice = createSlice({
         state.isLoading = true
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        console.log(action)
+        localStorage.setItem('token', action.payload.token)
         state.isLoading = false
         state.user = action.payload.success ? action.payload.user : null
         state.isAuthenticated = action.payload.success
@@ -126,6 +126,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false
       })
       .addCase(logoutUser.fulfilled, (state, action) => {
+        localStorage.removeItem('token')
         state.isLoading = false
         state.user = null
         state.isAuthenticated = false

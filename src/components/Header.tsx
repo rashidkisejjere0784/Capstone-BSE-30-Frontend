@@ -44,7 +44,6 @@ const Header = () => {
                 })
             }
         })
-
     }
 
     const handleActiveTab = (value: string)=>{

@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
+import { z } from 'zod'
 
 export interface Product {
     id: string;
@@ -22,7 +23,6 @@ export interface Product {
     rating: number[];
 }
 
-
 export interface Links {
     name: string,
     link: string,
@@ -42,3 +42,16 @@ export interface ProductImageUploadProps {
   isEditMode: boolean;
   isCustomStyling: boolean;
 }
+
+export const productFormSchema = z.object({
+  name: z.string(),
+  price: z.string(),
+  categoryId: z.string(),
+  description: z.string(),
+  discount: z.string(),
+  availability: z.string(),
+  quantity: z.string(),
+  brandId: z.string(),
+  colors: z.string(),
+  rating: z.string(),
+})

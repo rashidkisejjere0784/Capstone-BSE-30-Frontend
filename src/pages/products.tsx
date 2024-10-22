@@ -1,7 +1,9 @@
+// @ts-nocheck
+
 import {Link} from "react-router-dom";
 import { useEffect, useState } from 'react'
 import { Slider } from '@/components/ui/slider'
-import { popularTags, products } from '@/assets/data.ts'
+import { popularTags } from '@/assets/data.ts'
 import watch from '/images/smart-watches.png'
 import SearchInput from '@/components/SearchInput.tsx'
 import ProductCard from '@/components/ProductCard.tsx'
@@ -16,6 +18,8 @@ import {
 } from '@/components/ui/pagination.tsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchAllProducts } from '@/store/shop/products-slice'
+import { addWishListItem } from '@/store/shop/wishlist-slice'
+import { toast } from '@/hooks/use-toast.ts'
 
 const Categories = [
   'Electronic Devices',
@@ -63,17 +67,31 @@ const Products = () => {
   const [selectedPrice, setSelectedPrice] = useState('')
   const [checkedBrands, setCheckedBrands] = useState<string[]>([])
 
-  const { productList, isLoading } = useSelector((state) => state.shopProducts)
+  const { productList } = useSelector((state) => state.shopProducts)
   const dispatch = useDispatch()
   useEffect(() => {
     // @ts-ignore
     dispatch(fetchAllProducts())
   }, [dispatch])
-  console.log(productList, isLoading)
-    for(let i = 0; i < 5; i++){
-        console.log("Product Name: ", productList[0])
-    }
 
+  const handleAddToWishList = (productId)=>{
+    dispatch(addWishListItem(productId)).then((data)=>{
+      if(data?.payload?.success){
+        toast({
+          title: "Product Added to Wishlist Successfully",
+          description: data?.payload?.message,
+          variant: 'success'
+        })
+      }else{
+        toast({
+          title: "Failed to add Product to Wishlist",
+          description: data?.payload?.message,
+          variant: 'destructive'
+        })
+      }
+
+    })
+  }
 
   const handleBrandChange = (brand: string) => {
     setCheckedBrands((prev) =>
@@ -321,14 +339,16 @@ const Products = () => {
                 {productList.map(
                   (product: {
                     _id: string
-                    image: string;
+                    product_image: string;
                     name: string
                     price: string
                   }) => (
+
                     <ProductCard
                       key={product?._id}
                       id={product?._id}
-                      src={product?.image}
+                      handleAddToWishList={handleAddToWishList}
+                      src={`http://${product?.product_image}`}
                       name={product?.name}
                       amount={product?.price}
                       className={'max-h-[20rem] overflow-hidden'}
