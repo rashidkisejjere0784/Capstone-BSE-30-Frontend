@@ -6,7 +6,7 @@ const initialState = {
   categoryList: [],
   brandList: []
 }
-const SERVER = import.meta.env.VITE_LOCAL_SERVER
+const SERVER = import.meta.env.VITE_LOCAL_SERVER;
 
 const ALL_CATEGORY_API = `${SERVER}category/all`
 const DELETE_CATEGORY_API = `${SERVER}category/delete`

@@ -1,10 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-// eslint-disable-next-line camelcase
-const BACkEND_API = 'http://127.0.0.1:3000/api/auth/signup'
-const LOG_IN_API = 'http://127.0.0.1:3000/api/auth/signin'
-const CHECK_AUTH_API = 'http://127.0.0.1:3000/api/auth/check-auth'
-const LOG_OUT_API = 'http://127.0.0.1:3000/api/auth/logout'
+const SERVER = import.meta.env.VITE_SERVER as string; 
+ 
+const BACkEND_API = `${SERVER}/api/auth/signup`;
+const LOG_IN_API = `${SERVER}/api/auth/signin`;
+const CHECK_AUTH_API = `${SERVER}/api/auth/check-auth`;
+const LOG_OUT_API = `${SERVER}/api/auth/logout`;
+
 const initialState = {
   isAuthenticated: false,
   isLoading: false,

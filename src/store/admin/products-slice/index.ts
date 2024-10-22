@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
+const SERVER = import.meta.env.VITE_SERVER;
 
 const ALL_PRODUCTS_API = 'http://127.0.0.1:3000/api/product/all'
 // const ADD_NEW_PRODUCT_API = 'http://127.0.0.1:3000/api/product/add'
@@ -9,6 +10,7 @@ const initialState = {
   isLoading: false,
   productList: []
 }
+
 
 const token = localStorage.getItem('token')
 
@@ -45,7 +47,7 @@ export const editProduct = createAsyncThunk(
   '/products/editProduct',
   async ({ id, formData }) => {
     const result = await axios.put(
-      `http://localhost:5000/api/admin/products/edit/${id}`,
+      `${SERVER}/api/admin/products/edit/${id}`,
       formData,
       {
         headers: {
