@@ -1,10 +1,44 @@
+// @ts-nocheck
+
 import earBuds from '/images/wireless-earbuds.png'
 import ProductCard from '@/components/ProductCard.tsx'
-import { products } from '@/assets/data.ts'
 import ShopNowButton from '@/components/ShopNowButton.tsx'
 import Button from '@/components/Button.tsx'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { fetchAllProducts } from '@/store/shop/products-slice'
+import { addWishListItem } from '@/store/shop/wishlist-slice'
+import { toast } from '@/hooks/use-toast.ts'
+import { getRandomProducts } from '@/assets/utils.ts'
 const ComputerAccessories = () => {
+
+  const { productList } = useSelector((state) => state.shopProducts)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    // @ts-ignore
+    dispatch(fetchAllProducts())
+  }, [dispatch])
+
+  const handleAddToWishList = (productId)=>{
+    dispatch(addWishListItem(productId)).then((data)=>{
+      if(data?.payload?.success){
+        toast({
+          title: "Product Added to Wishlist Successfully",
+          description: data?.payload?.message,
+          variant: 'success'
+        })
+      }else{
+        toast({
+          title: "Failed to add Product to Wishlist",
+          description: data?.payload?.message,
+          variant: 'destructive'
+        })
+      }
+
+    })
+  }
   return (
+
     <>
 
       <section className='section my-8'>
@@ -13,7 +47,7 @@ const ComputerAccessories = () => {
           <div className='2xl:col-span-9 w-full h-full flex flex-col gap-6'>
             <div className='flex justify-between items-center h-auto flex-wrap'>
               <div className='flex gap-4 items-center'>
-                <h2 className='text-gray-900 font-extrabold text-2xl'>Computer Accessories</h2>
+                <h2 className='text-gray-900 font-extrabold text-2xl'>Buy Different Brands</h2>
               </div>
               <div className='flex gap-6 text-sm flex-wrap'>
                 <ul className='text-gray-600 list-none flex items-center gap-4 flex-wrap'>
@@ -39,14 +73,25 @@ const ComputerAccessories = () => {
             {/*    Products */}
             <div className='grid 2xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 2xl:grid-rows-2 gap-4 flex-grow'>
               {/*    Products Card */}
-              {
-                                products.slice(0, 8).map(({ id, image, name, price, deals, discount }) => (
-                                  <ProductCard
-                                    key={id} id={id} src={image} name={name} amount={price} deal={deals}
-                                    className='max-h-[20rem] overflow-hidden' discount={discount}
-                                  />
-                                ))
-                            }
+              {getRandomProducts(productList, 8).map(
+                (product: {
+                  _id: string
+                  product_image: string;
+                  name: string
+                  price: string
+                }) => (
+
+                  <ProductCard
+                    key={product?._id}
+                    id={product?._id}
+                    handleAddToWishList={handleAddToWishList}
+                    src={`http://${product?.product_image}`}
+                    name={product?.name}
+                    amount={product?.price}
+                    className={'max-h-[20rem] overflow-hidden'}
+                  />
+                )
+              )}
             </div>
           </div>
 

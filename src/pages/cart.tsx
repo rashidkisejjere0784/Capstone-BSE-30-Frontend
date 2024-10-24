@@ -4,8 +4,47 @@ import {products} from "@/assets/data.ts";
 import CartItems from "@/components/cart/CartItems.tsx";
 import {extractNum} from "@/assets/utils.ts";
 import Button from "@/components/Button.tsx";
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { fetchAllProducts } from '@/store/admin/products-slice'
+import { toast } from '@/hooks/use-toast.ts'
+import { deleteCartItem, getCartItems } from '@/store/shop/cart-slice'
 
 const Cart = ()=>{
+
+    const { cartList } = useSelector((state) => state.shopCar)
+    const { productList } = useSelector((state) => state.adminProducts)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(getCartItems())
+        dispatch(fetchAllProducts())
+    }, [dispatch])
+
+    const cartProducts = Array.isArray(cartList) && cartList.length > 0
+      ? cartList.map(item => productList.find(product => product?._id === item?.product_id))
+      : []
+    const handleRemoveFromCart = (cartId) => {
+        dispatch(deleteCartItem(cartId)).then((data) => {
+            if (data?.payload?.success) {
+                toast({
+                    title: 'Product removed from Cart List Successfully',
+                    description: data?.payload?.message,
+                    variant: 'success'
+                })
+                dispatch(getCartItems())
+                dispatch(fetchAllProducts())
+            } else {
+                toast({
+                    title: 'Failed to remove Product from Cart List',
+                    description: data?.payload?.message,
+                    variant: 'destructive'
+                })
+            }
+        })
+    }
+    const getCartId = (id) => {
+        return cartList.find(item => item.product_id === id)._id
+    }
     const filteredProducts = products.filter((product: { cart: boolean; }) => product.cart);
 
     return (

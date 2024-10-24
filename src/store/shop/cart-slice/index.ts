@@ -3,22 +3,22 @@ import axios from 'axios'
 
 const initialState = {
   isLoading: false,
-  wishList: []
+  cartList: []
 }
 const SERVER = import.meta.env.VITE_LOCAL_SERVER
 
-const ALL_WISHLIST_API = `${SERVER}wishlist/all`
-const ADD_WISHLIST_API = `${SERVER}wishlist/add`
-const DELETE_WISHLIST_API = `${SERVER}wishlist/delete`
-const EDIT_WISHLIST_API = `${SERVER}wishlist/edit`
+const ALL_CART_API = `${SERVER}cart/all`
+const ADD_CART_API = `${SERVER}cart/add`
+const DELETE_CART_API = `${SERVER}cart/delete`
+const EDIT_CART_API = `${SERVER}cart/edit`
 
 // eslint-disable-next-line no-undef
 const token = localStorage.getItem('token')
-export const getWishListItems = createAsyncThunk(
-  '/wishlist/getWishListItems',
+export const getCartItems = createAsyncThunk(
+  '/cart/getCartItems',
   async () => {
     const response = await axios.get(
-      ALL_WISHLIST_API,{
+      ALL_CART_API, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`
@@ -29,13 +29,28 @@ export const getWishListItems = createAsyncThunk(
   }
 )
 
-export const addWishListItem = createAsyncThunk(
-  '/wishlist/addWishListItem',
+export const addCartItem = createAsyncThunk(
+  '/cart/addCartItem',
+  async (data) => {
+    console.log('Cart Data: ', data)
+    const response = await axios.post(
+      ADD_CART_API, data, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+
+    return response.data
+  }
+)
+
+export const editCartItem = createAsyncThunk(
+  '/cart/editCartItem',
   async (data) => {
     const response = await axios.post(
-      ADD_WISHLIST_API, {
-        productId: data
-      }, {
+      EDIT_CART_API, data, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`
@@ -46,29 +61,14 @@ export const addWishListItem = createAsyncThunk(
   }
 )
 
-export const editWishListItem = createAsyncThunk(
-  '/wishlist/editWishListItem',
-  async (data) => {
-    const response = await axios.post(
-      EDIT_WISHLIST_API, data, {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    )
-    return response.data
-  }
-)
-
-export const deleteWishListItem = createAsyncThunk(
-  '/wishlist/deleteWishListItem',
+export const deleteCartItem = createAsyncThunk(
+  '/cart/deleteCartItem',
   async (id) => {
     const obj = {
-      wishListId: id
+      cartId: id
     }
     const response = await axios.post(
-      DELETE_WISHLIST_API, obj, {
+      DELETE_CART_API, obj, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`
@@ -79,25 +79,25 @@ export const deleteWishListItem = createAsyncThunk(
   }
 )
 
-const userWishListSlice = createSlice({
-  name: 'wishListSlice',
+const userCartSlice = createSlice({
+  name: 'cartSlice',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getWishListItems.pending, (state) => {
+      .addCase(getCartItems.pending, (state) => {
         state.isLoading = true
-      }).addCase(getWishListItems.rejected, (state) => {
+      }).addCase(getCartItems.rejected, (state) => {
         state.isLoading = false
-        state.wishList = []
-      }).addCase(getWishListItems.fulfilled, (state, action) => {
+        state.cartList = []
+      }).addCase(getCartItems.fulfilled, (state, action) => {
         state.isLoading = false
-        state.wishList = action.payload
-      }).addCase(deleteWishListItem.fulfilled, (state, action) => {
+        state.cartList = action.payload
+      }).addCase(deleteCartItem.fulfilled, (state, action) => {
         state.isLoading = false
-        state.wishList = action.payload
+        state.cartList = action.payload
       })
   }
 })
 
-export default userWishListSlice.reducer
+export default userCartSlice.reducer

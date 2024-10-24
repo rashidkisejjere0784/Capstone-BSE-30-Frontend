@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 // eslint-disable-next-line camelcase
@@ -10,10 +12,8 @@ const initialState = {
   isLoading: false,
   user: null
 }
-
 export const registerUser = createAsyncThunk(
   '/auth/register',
-
   async (formData) => {
     const response = await axios.post(
       BACkEND_API,
@@ -25,10 +25,8 @@ export const registerUser = createAsyncThunk(
     return response.data
   }
 )
-
 export const loginUser = createAsyncThunk(
   '/auth/login',
-
   async (formData) => {
     const response = await axios.post(
       LOG_IN_API,
@@ -37,11 +35,9 @@ export const loginUser = createAsyncThunk(
         withCredentials: true
       }
     )
-
     return response.data
   }
 )
-
 export const logoutUser = createAsyncThunk(
   '/auth/logout',
 
@@ -53,14 +49,12 @@ export const logoutUser = createAsyncThunk(
         withCredentials: true
       }
     )
-
     return response.data
   }
 )
 
 export const checkAuth = createAsyncThunk(
   '/auth/checkauth',
-
   async () => {
     const response = await axios.get(
       CHECK_AUTH_API,
@@ -72,7 +66,6 @@ export const checkAuth = createAsyncThunk(
         }
       }
     )
-
     return response.data
   }
 )
@@ -120,12 +113,12 @@ const authSlice = createSlice({
         state.user = action.payload.success ? action.payload.user : null
         state.isAuthenticated = action.payload.success
       })
-      .addCase(checkAuth.rejected, (state, action) => {
+      .addCase(checkAuth.rejected, (state) => {
         state.isLoading = false
         state.user = null
         state.isAuthenticated = false
       })
-      .addCase(logoutUser.fulfilled, (state, action) => {
+      .addCase(logoutUser.fulfilled, (state) => {
         localStorage.removeItem('token')
         state.isLoading = false
         state.user = null
