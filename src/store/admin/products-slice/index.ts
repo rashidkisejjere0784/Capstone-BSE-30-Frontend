@@ -3,9 +3,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 const SERVER = import.meta.env.VITE_SERVER;
 
-const ALL_PRODUCTS_API = 'http://127.0.0.1:3000/api/product/all'
-// const ADD_NEW_PRODUCT_API = 'http://127.0.0.1:3000/api/product/add'
-const DELETE_PRODUCT_API = 'http://127.0.0.1:3000/api/product/delete'
+const ALL_PRODUCTS_API = `${SERVER}/api/product/all`
+// const ADD_NEW_PRODUCT_API = '${SERVER}/api/product/add'
+const DELETE_PRODUCT_API = `${SERVER}/api/product/delete`
 const initialState = {
   isLoading: false,
   productList: []

@@ -9,7 +9,7 @@ const initialState = {
   productDetails: null
 }
 
-const ALL_PRODUCTS_API = 'http://127.0.0.1:3000/api/product/all'
+const ALL_PRODUCTS_API = `${SERVER}/api/product/all`
 
 export const fetchAllProducts = createAsyncThunk(
   '/products/all',
