@@ -18,7 +18,7 @@ export const fetchAllProducts = createAsyncThunk(
   '/products/fetchAllProducts',
 
   async () => {
-    const products = await axios.get(ALL_PRODUCTS_API)
+    const products = await axios.get(ALL_PRODUCTS_API, {withCredentials: true})
     console.log(products.data)
     return products.data
   }
@@ -52,7 +52,8 @@ export const editProduct = createAsyncThunk(
       {
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        withCredentials: true
       }
     )
 
