@@ -8,8 +8,8 @@ import CartItems from '@/components/cart/CartItems.tsx'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchAllProducts } from '@/store/admin/products-slice'
-import { addCartItem } from '@/store/shop/cart-slice'
 import { toast } from '@/hooks/use-toast.ts'
+import { addCartItem } from '@/store/shop/cart-slice/index.ts'
 
 const Product = ()=>{
     const {productId} = useParams();

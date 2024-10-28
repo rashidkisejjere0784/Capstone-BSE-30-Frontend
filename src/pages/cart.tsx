@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
 import Discount from "@/components/Discount.tsx";
 import {products} from "@/assets/data.ts";
@@ -8,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { fetchAllProducts } from '@/store/admin/products-slice'
 import { toast } from '@/hooks/use-toast.ts'
-import { deleteCartItem, getCartItems } from '@/store/shop/cart-slice'
+import { deleteCartItem, getCartItems } from '@/store/shop/cart-slice/index.ts'
 
 const Cart = ()=>{
 

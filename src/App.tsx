@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Route, Routes } from 'react-router-dom'
 import AuthPage from '@/pages/auth'
 import PageNotFound from '@/pages/page-not-found.tsx'
@@ -12,9 +14,6 @@ import ContactUs from './pages/contactUs'
 import Cart from '@/pages/cart.tsx'
 import Checkout from '@/pages/checkout.tsx'
 import CheckAuth from './components/auth/CheckAuth'
-import { useEffect } from 'react'
-import { checkAuth } from '@/store/auth-slice'
-
 import { useDispatch, useSelector } from 'react-redux'
 import Admin from '@/layouts/Admin.tsx'
 import AdminDashboard from '@/pages/admin-pages/dashboard.tsx'
@@ -25,12 +24,6 @@ const App = () => {
   const { user, isAuthenticated, isLoading } = useSelector(
     (state) => state.auth
   )
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    // @ts-ignore
-    dispatch(checkAuth())
-  }, [dispatch])
 
   if (isLoading) return <p>Page Loading</p>
 

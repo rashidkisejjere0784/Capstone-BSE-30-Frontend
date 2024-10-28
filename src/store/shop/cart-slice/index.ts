@@ -10,7 +10,6 @@ const SERVER = import.meta.env.VITE_LOCAL_SERVER
 const ALL_CART_API = `${SERVER}cart/all`
 const ADD_CART_API = `${SERVER}cart/add`
 const DELETE_CART_API = `${SERVER}cart/delete`
-const EDIT_CART_API = `${SERVER}cart/edit`
 
 // eslint-disable-next-line no-undef
 const token = localStorage.getItem('token')
@@ -45,22 +44,6 @@ export const addCartItem = createAsyncThunk(
     return response.data
   }
 )
-
-export const editCartItem = createAsyncThunk(
-  '/cart/editCartItem',
-  async (data) => {
-    const response = await axios.post(
-      EDIT_CART_API, data, {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    )
-    return response.data
-  }
-)
-
 export const deleteCartItem = createAsyncThunk(
   '/cart/deleteCartItem',
   async (id) => {

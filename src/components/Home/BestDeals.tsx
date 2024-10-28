@@ -35,8 +35,6 @@ const BestDeals = () => {
     })
   }
 
-  console.log(productList)
-
   return (
     <>
       <section className='section my-8'>
