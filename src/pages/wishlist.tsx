@@ -11,19 +11,21 @@ import {
 import Discount from '@/components/Discount.tsx'
 import Button from '@/components/Button.tsx'
 import { useSelector, useDispatch } from 'react-redux'
-import { useEffect } from 'react'
-import { fetchAllProducts } from '@/store/admin/products-slice'
 import { deleteWishListItem, getWishListItems } from '@/store/shop/wishlist-slice'
 import { TiDeleteOutline } from 'react-icons/ti'
 import { toast } from '@/hooks/use-toast.ts'
+import { useEffect } from 'react'
 const WishlistPage = () => {
   const { wishList } = useSelector((state) => state.shopWishList)
   const { productList } = useSelector((state) => state.adminProducts)
   const dispatch = useDispatch()
+
   useEffect(() => {
     dispatch(getWishListItems())
-    dispatch(fetchAllProducts())
-  }, [dispatch])
+  }, [])
+
+  // console.log("WishList: ", wishList)
+  console.log("WishList: ")
 
   const wishListProducts = Array.isArray(wishList) && wishList.length > 0
     ? wishList.map(item => productList.find(product => product?._id === item?.product_id))
@@ -37,7 +39,6 @@ const WishlistPage = () => {
           variant: 'success'
         })
         dispatch(getWishListItems())
-        dispatch(fetchAllProducts())
       } else {
         toast({
           title: 'Failed to remove Product from Wishlist',

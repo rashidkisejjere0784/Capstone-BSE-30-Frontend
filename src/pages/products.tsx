@@ -1,9 +1,7 @@
 // @ts-nocheck
 
 import {Link} from "react-router-dom";
-import { useEffect, useState } from 'react'
-import { Slider } from '@/components/ui/slider'
-import { popularTags } from '@/assets/data.ts'
+import { useState } from 'react'
 import watch from '/images/smart-watches.png'
 import SearchInput from '@/components/SearchInput.tsx'
 import ProductCard from '@/components/ProductCard.tsx'
@@ -16,8 +14,7 @@ import {
   PaginationNext,
   PaginationPrevious
 } from '@/components/ui/pagination.tsx'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllProducts } from '@/store/shop/products-slice'
+import { useSelector } from 'react-redux'
 import { addWishListItem } from '@/store/shop/wishlist-slice'
 import { toast } from '@/hooks/use-toast.ts'
 
@@ -34,16 +31,6 @@ const Categories = [
   'Watches & Accessories',
   'GPS & Navigation',
   'Wearable Technology'
-]
-
-const prices = [
-  'App Price',
-  'Under $20',
-  '$25 to $100',
-  '$100 to $300',
-  '$300 to $500',
-  '$500 to $ 1,000',
-  '$1,000 to $10,000'
 ]
 const Brands = [
   'Apple',
@@ -64,15 +51,8 @@ const Brands = [
 ]
 const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState('')
-  const [selectedPrice, setSelectedPrice] = useState('')
   const [checkedBrands, setCheckedBrands] = useState<string[]>([])
-
   const { productList } = useSelector((state) => state.shopProducts)
-  const dispatch = useDispatch()
-  useEffect(() => {
-    // @ts-ignore
-    dispatch(fetchAllProducts())
-  }, [dispatch])
 
   const handleAddToWishList = (productId)=>{
     dispatch(addWishListItem(productId)).then((data)=>{
@@ -98,15 +78,11 @@ const Products = () => {
       prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
     )
   }
-  const handlePriceChange = (price: string) => {
-    setSelectedPrice(price)
-  }
 
   const handleRadioChange = (category: string) => {
     setSelectedCategory(category)
   }
-  // @ts-ignore
-  // @ts-ignore
+
     return (
     <>
       <div className={'section py-5 bg-gray-50'}>
@@ -162,47 +138,6 @@ const Products = () => {
               </div>
               <div className={'border-b-[1px] pb-8 w-full'}>
                 <h3 className={'text-gray-900 font-medium mt-6 mb-4'}>
-                  PRICE RANGE
-                </h3>
-                <div className={'mt-4 mb-6'}>
-                  <Slider defaultValue={[33]} max={100} step={1} />
-                </div>
-                <div className={'grid grid-cols-2 gap-4 items-center my-2'}>
-                  <div
-                    className={'border border-gray-200 py-2 px-4 text-gray-600'}
-                  >
-                    Mini Price
-                  </div>
-                  <div
-                    className={'border border-gray-200 py-2 px-4 text-gray-600'}
-                  >
-                    Max Price
-                  </div>
-                </div>
-                <div className={'flex flex-col gap-4 my-4'}>
-                  {prices.map((price: string, index) => (
-                    <label
-                      key={index}
-                      className={`${selectedPrice === price ? 'text-gray-900 font-medium' : 'text-gray-700'} text-sm flex items-center gap-4`}
-                    >
-                      <input
-                        checked={selectedPrice === price}
-                        onChange={() => handlePriceChange(price)}
-                        className={
-                          "relative h-5 w-5 appearance-none rounded-full border-[1.9px] border-solid border-gray-200 before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-transparent before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary-500 checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary-500 checked:after:bg-gray-00 checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] checked:border-8 hover:before:shadow-primary-200 focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-primary-500 focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary-500 checked:focus:before:scale-100 checked:focus:before:shadow-checkbox checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] rtl:float-right"
-                        }
-                        type={'checkbox'}
-                        value={price}
-                        name={'price'}
-                      />
-                      {price}
-                    </label>
-                  ))}
-                </div>
-              </div>
-              {/*    */}
-              <div className={'border-b-[1px] pb-8 w-full'}>
-                <h3 className={'text-gray-900 font-medium mt-6 mb-4'}>
                   POPULAR BRANDS
                 </h3>
                 <div className={'grid grid-cols-2 gap-4'}>
@@ -224,24 +159,6 @@ const Products = () => {
                 </div>
               </div>
             </div>
-            {/*    */}
-            <div className={'xl:border-b-[1px] pb-8'}>
-              <h3 className={'text-gray-900 font-medium mt-6 mb-4'}>
-                POPULAR TAGS
-              </h3>
-              <div className="flex gap-2 flex-wrap font-bold text-sm">
-                {popularTags.map(({ name, link }, index) => (
-                  <Link
-                    key={index}
-                    to={link}
-                    className="rounded-sm border-[1px] text-gray-900 border-gray-100 w-fit p-2 hover:text-primary-500 focus:text-primary-500 hover:bg-primary-50 focus:border-primary-500 hover:border-primary-500 focus:bg-primary-50"
-                  >
-                    {name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            {/**/}
             <div
               className={
                 'p-6 hidden border-4 border-primary-100 text-center xl:flex xl:flex-col xl:gap-2'

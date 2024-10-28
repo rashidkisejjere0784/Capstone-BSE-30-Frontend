@@ -1,6 +1,5 @@
 import {
   ChartNoAxesCombined,
-  LayoutDashboard,
   ShoppingBasket
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
@@ -9,12 +8,6 @@ import { MdOutlineCategory } from 'react-icons/md'
 import { SiBrandfolder } from 'react-icons/si'
 
 const adminSidebarMenuItems = [
-  {
-    id: 'dashboard',
-    label: 'Dashboard',
-    path: '/admin',
-    icon: <LayoutDashboard />
-  },
   {
     id: 'products',
     label: 'Products',

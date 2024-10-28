@@ -1,22 +1,15 @@
-import Hero from '@/components/Home/Hero.tsx'
+// @ts-nocheck
+
 import BestDeals from '@/components/Home/BestDeals.tsx'
-import { CarouselItems } from '@/components/Home/Carousel.tsx'
-import FeaturedProducts from '@/components/Home/FeaturedProducts.tsx'
 import Advertising from '@/components/Home/Advertising.tsx'
 import ComputerAccessories from '@/components/Home/ComputerAccessories.tsx'
 import Button from '@/components/Button.tsx'
 import ShopNowButton from '@/components/ShopNowButton.tsx'
-
 import macbook from '/images/macbook.png'
-import Sales from '@/components/Home/Sales.tsx'
 const Home = () => {
   return (
     <>
-      <Hero />
-      {/*    section 2 products */}
       <BestDeals />
-      <CarouselItems />
-      <FeaturedProducts />
       <Advertising />
       <ComputerAccessories />
       <section className='section-badge py-8'>
@@ -39,7 +32,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <Sales />
     </>
   )
 }

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Route, Routes } from 'react-router-dom'
 import AuthPage from '@/pages/auth'
 import PageNotFound from '@/pages/page-not-found.tsx'
@@ -12,28 +14,29 @@ import ContactUs from './pages/contactUs'
 import Cart from '@/pages/cart.tsx'
 import Checkout from '@/pages/checkout.tsx'
 import CheckAuth from './components/auth/CheckAuth'
-import { useEffect } from 'react'
-import { checkAuth } from '@/store/auth-slice'
-
-import { useDispatch, useSelector } from 'react-redux'
 import Admin from '@/layouts/Admin.tsx'
 import AdminDashboard from '@/pages/admin-pages/dashboard.tsx'
 import AdminProducts from '@/pages/admin-pages/products.tsx'
 import AdminCategories from '@/pages/admin-pages/categories.tsx'
 import AdminBrands from '@/pages/admin-pages/brands.tsx'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { setIsAuthenticated, setUser } from '@/store/auth-slice'
+import { getWishListItems } from '@/store/shop/wishlist-slice'
+import { fetchAllProducts } from '@/store/shop/products-slice'
+import { getCartItems } from '@/store/shop/cart-slice/index.ts'
+import { getCategoryItems } from '@/store/common-slice'
 const App = () => {
-  const { user, isAuthenticated, isLoading } = useSelector(
-    (state) => state.auth
-  )
+  const { user, isAuthenticated } = useSelector(state => state.auth)
   const dispatch = useDispatch()
-
   useEffect(() => {
-    // @ts-ignore
-    dispatch(checkAuth())
-  }, [dispatch])
-
-  if (isLoading) return <p>Page Loading</p>
-
+    dispatch(setUser())
+    dispatch(setIsAuthenticated())
+    dispatch(fetchAllProducts())
+    dispatch(getWishListItems())
+    dispatch(getCartItems)
+    dispatch(getCategoryItems())
+  }, [])
   return (
     <Routes>
       <Route path='/' element={<Base />}>

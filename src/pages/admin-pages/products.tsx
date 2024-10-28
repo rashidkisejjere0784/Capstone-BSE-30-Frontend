@@ -10,7 +10,6 @@ import {
 import {
   deleteProduct,
   editProduct,
-  fetchAllProducts
 } from '@/store/admin/products-slice'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,8 +19,10 @@ import axios from 'axios'
 import { Label } from '@/components/ui/label.tsx'
 import { Input } from '@/components/ui/input.tsx'
 import { FileIcon, UploadCloudIcon, XIcon } from 'lucide-react'
+import { getUserCookie } from '@/assets/utils.ts'
+import { fetchAllProducts } from '@/store/shop/products-slice'
 
-const SERVER = import.meta.env.VITE_SERVER;
+const SERVER = import.meta.env.VITE_SERVER
 
 const ADD_NEW_PRODUCT_API = `${SERVER}/api/product/add`
 
@@ -53,7 +54,7 @@ function AdminProducts () {
   const [quantity, setQuantity] = useState('')
   const [brandId, setBrandId] = useState('')
 
-  const token = localStorage.getItem('token')
+  const token = getUserCookie().token
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -91,7 +92,7 @@ function AdminProducts () {
     } catch (error) {
       toast({
         title: 'Error uploading product',
-        description: response.data.message,
+        description: "Product not added to server",
         variant: 'destructive'
       })
     }

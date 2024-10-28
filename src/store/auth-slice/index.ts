@@ -1,24 +1,23 @@
+// @ts-nocheck
+
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-const SERVER = import.meta.env.VITE_SERVER as string; 
- 
-const BACkEND_API = `${SERVER}/api/auth/signup`;
-const LOG_IN_API = `${SERVER}/api/auth/signin`;
-const CHECK_AUTH_API = `${SERVER}/api/auth/check-auth`;
-const LOG_OUT_API = `${SERVER}/api/auth/logout`;
+import { getUserCookie, removeUserCookie, setUserCookie } from '@/assets/utils.ts'
+const SERVER = import.meta.env.VITE_SERVER
+const REGISTER_USER_API = `${SERVER}/api/auth/signup`
+const LOG_IN_API = `${SERVER}/api/auth/signin`
+const LOG_OUT_API = `${SERVER}/api/auth/logout`
 
 const initialState = {
   isAuthenticated: false,
   isLoading: false,
   user: null
 }
-
 export const registerUser = createAsyncThunk(
   '/auth/register',
-
   async (formData) => {
     const response = await axios.post(
-      BACkEND_API,
+      REGISTER_USER_API,
       formData,
       {
         withCredentials: true
@@ -27,26 +26,19 @@ export const registerUser = createAsyncThunk(
     return response.data
   }
 )
-
 export const loginUser = createAsyncThunk(
   '/auth/login',
-
   async (formData) => {
     const response = await axios.post(
       LOG_IN_API,
-      formData,
-      {
-        withCredentials: true
-      }
+      formData
     )
-
+    setUserCookie(response.data)
     return response.data
   }
 )
-
 export const logoutUser = createAsyncThunk(
   '/auth/logout',
-
   async () => {
     const response = await axios.post(
       LOG_OUT_API,
@@ -55,26 +47,6 @@ export const logoutUser = createAsyncThunk(
         withCredentials: true
       }
     )
-
-    return response.data
-  }
-)
-
-export const checkAuth = createAsyncThunk(
-  '/auth/checkauth',
-
-  async () => {
-    const response = await axios.get(
-      CHECK_AUTH_API,
-      {
-        withCredentials: true,
-        headers: {
-          'Cache-Control':
-            'no-store, no-cache, must-revalidate, proxy-revalidate'
-        }
-      }
-    )
-
     return response.data
   }
 )
@@ -83,19 +55,30 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setUser: (state, action) => {}
+    setUser: (state) => {
+      const userCookie = getUserCookie()
+      if (userCookie !== '') {
+        state.user = userCookie.user
+      } else {
+        state.user = null
+      }
+    },
+    setIsAuthenticated: (state) => {
+      const userCookie = getUserCookie()
+      state.isAuthenticated = userCookie !== ''
+    }
   },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state) => {
         state.isLoading = false
         state.user = null
         state.isAuthenticated = false
       })
-      .addCase(registerUser.rejected, (state, action) => {
+      .addCase(registerUser.rejected, (state) => {
         state.isLoading = false
         state.user = null
         state.isAuthenticated = false
@@ -104,37 +87,22 @@ const authSlice = createSlice({
         state.isLoading = true
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        localStorage.setItem('token', action.payload.token)
         state.isLoading = false
         state.user = action.payload.success ? action.payload.user : null
         state.isAuthenticated = action.payload.success
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(loginUser.rejected, (state) => {
         state.isLoading = false
         state.user = null
         state.isAuthenticated = false
       })
-      .addCase(checkAuth.pending, (state) => {
-        state.isLoading = true
-      })
-      .addCase(checkAuth.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.user = action.payload.success ? action.payload.user : null
-        state.isAuthenticated = action.payload.success
-      })
-      .addCase(checkAuth.rejected, (state, action) => {
+      .addCase(logoutUser.fulfilled, (state) => {
         state.isLoading = false
         state.user = null
         state.isAuthenticated = false
-      })
-      .addCase(logoutUser.fulfilled, (state, action) => {
-        localStorage.removeItem('token')
-        state.isLoading = false
-        state.user = null
-        state.isAuthenticated = false
+        removeUserCookie()
       })
   }
 })
-
-export const { setUser } = authSlice.actions
+export const { setUser, setIsAuthenticated } = authSlice.actions
 export default authSlice.reducer

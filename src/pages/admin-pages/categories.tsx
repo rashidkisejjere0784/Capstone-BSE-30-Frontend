@@ -49,13 +49,8 @@ function AdminCategories () {
   const [formData, setFormData] = useState(initialFormData)
   const [currentEditedId, setCurrentEditedId] = useState(null)
   const { categoryList } = useSelector((state) => state.commonFeature)
-
   const dispatch = useDispatch()
   const { toast } = useToast()
-
-  useEffect(() => {
-    dispatch(getCategoryItems())
-  }, [dispatch])
 
   async function onSubmit (event) {
     event.preventDefault()
@@ -96,8 +91,6 @@ function AdminCategories () {
         }
       })
   }
-
-  console.log(formData)
 
   const handleDelete = (categoryID) => {
     dispatch(deleteCategoryItem(categoryID)).then((data) => {

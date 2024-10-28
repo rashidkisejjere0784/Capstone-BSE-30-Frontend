@@ -1,14 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-const SERVER = import.meta.env.VITE_SERVER;
-
-
 const initialState = {
   isLoading: false,
   productList: [],
   productDetails: null
 }
-
+const SERVER = import.meta.env.VITE_SERVER
 const ALL_PRODUCTS_API = `${SERVER}/api/product/all`
 
 export const fetchAllProducts = createAsyncThunk(
