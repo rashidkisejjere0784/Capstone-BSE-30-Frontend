@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { getUserCookie } from '@/assets/utils.ts'
 
 const initialState = {
   isLoading: false,
@@ -18,12 +19,12 @@ const ALL_BRAND_API = `${SERVER}brand/all`
 const DELETE_BRAND_API = `${SERVER}brand/delete`
 const ADD_BRAND_API = `${SERVER}brand/add`
 const EDIT_BRAND_API = `${SERVER}brand/edit`
-const token = localStorage.getItem('token')
+const token = getUserCookie().token
 export const getCategoryItems = createAsyncThunk(
   '/order/getCategoryItems',
   async () => {
     const response = await axios.get(
-      ALL_CATEGORY_API , {withCredentials: true}
+      ALL_CATEGORY_API, { withCredentials: true }
     )
     return response.data
   }
@@ -81,7 +82,7 @@ export const getBrandItems = createAsyncThunk(
   '/order/getBrandItems',
   async () => {
     const response = await axios.get(
-      ALL_BRAND_API , {withCredentials: true}
+      ALL_BRAND_API, { withCredentials: true }
     )
     return response.data
   }

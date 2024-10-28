@@ -1,47 +1,25 @@
 // @ts-nocheck
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-const SERVER = import.meta.env.VITE_SERVER;
-
+import { getUserCookie } from '@/assets/utils.ts'
+const SERVER = import.meta.env.VITE_SERVER
 const ALL_PRODUCTS_API = `${SERVER}/api/product/all`
-// const ADD_NEW_PRODUCT_API = '${SERVER}/api/product/add'
 const DELETE_PRODUCT_API = `${SERVER}/api/product/delete`
 const initialState = {
   isLoading: false,
   productList: []
 }
-
-
-const token = localStorage.getItem('token')
+const token = getUserCookie().token
 
 export const fetchAllProducts = createAsyncThunk(
   '/products/fetchAllProducts',
 
   async () => {
-    const products = await axios.get(ALL_PRODUCTS_API, {withCredentials: true})
+    const products = await axios.get(ALL_PRODUCTS_API, { withCredentials: true })
     console.log(products.data)
     return products.data
   }
 )
-
-// export const addNewProduct = createAsyncThunk(
-//   '/products/add-new-product',
-//   async (formData) => {
-//
-//     const result = await axios.post(
-//       ADD_NEW_PRODUCT_API,
-//       formData, {
-//         withCredentials: true,
-//         headers: {
-//           Authorization: `Bearer ${token}`, // Replace with your actual JWT token
-//           'Content-Type': 'multipart/form-data'
-//         }
-//       }
-//     )
-//
-//     return result?.data
-//   }
-// )
 
 export const editProduct = createAsyncThunk(
   '/products/editProduct',

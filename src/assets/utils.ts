@@ -71,5 +71,8 @@ export function setUserCookie(user) {
 }
 export function getUserCookie() {
   const userString = getCookie('user');
-  return userString ? JSON.parse(userString) : null;
+  return userString ? JSON.parse(userString) : '';
+}
+export function removeUserCookie() {
+  setCookie('user', '', -1);
 }

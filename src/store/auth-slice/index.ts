@@ -2,7 +2,7 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { getUserCookie, setUserCookie } from '@/assets/utils.ts'
+import { getUserCookie, removeUserCookie, setUserCookie } from '@/assets/utils.ts'
 const SERVER = import.meta.env.VITE_SERVER
 const REGISTER_USER_API = `${SERVER}/api/auth/signup`
 const LOG_IN_API = `${SERVER}/api/auth/signin`
@@ -87,8 +87,6 @@ const authSlice = createSlice({
         state.isLoading = true
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        // window.localStorage.setItem('token', action.payload.token)
-        window.sessionStorage.setItem('token', action.payload.token)
         state.isLoading = false
         state.user = action.payload.success ? action.payload.user : null
         state.isAuthenticated = action.payload.success
@@ -99,10 +97,10 @@ const authSlice = createSlice({
         state.isAuthenticated = false
       })
       .addCase(logoutUser.fulfilled, (state) => {
-        window.localStorage.removeItem('token')
         state.isLoading = false
         state.user = null
         state.isAuthenticated = false
+        removeUserCookie()
       })
   }
 })

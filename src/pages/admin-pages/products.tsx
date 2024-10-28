@@ -20,6 +20,7 @@ import axios from 'axios'
 import { Label } from '@/components/ui/label.tsx'
 import { Input } from '@/components/ui/input.tsx'
 import { FileIcon, UploadCloudIcon, XIcon } from 'lucide-react'
+import { getUserCookie } from '@/assets/utils.ts'
 
 const SERVER = import.meta.env.VITE_SERVER;
 
@@ -53,7 +54,7 @@ function AdminProducts () {
   const [quantity, setQuantity] = useState('')
   const [brandId, setBrandId] = useState('')
 
-  const token = localStorage.getItem('token')
+  const token = getUserCookie().token
 
   // Handle form submission
   const handleSubmit = async (e) => {

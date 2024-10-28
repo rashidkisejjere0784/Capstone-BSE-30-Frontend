@@ -62,13 +62,14 @@ const AuthPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault()
     dispatch(loginUser(logInForm)).then((data) => {
+      console.log(data.payload)
       if (data?.payload?.success) {
         console.log('Token: ', data)
         toast({
           title: data?.payload?.message,
           variant: "success"
         });
-        
+        navigate(0)
       } else {
         toast({
           title: data?.payload?.message,
