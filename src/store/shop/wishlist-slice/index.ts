@@ -18,7 +18,7 @@ export const getWishListItems = createAsyncThunk(
   '/wishlist/getWishListItems',
   async () => {
     const response = await axios.get(
-      ALL_WISHLIST_API,{
+      ALL_WISHLIST_API, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`

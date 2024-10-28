@@ -25,6 +25,7 @@ import { setIsAuthenticated, setUser } from '@/store/auth-slice'
 import { getWishListItems } from '@/store/shop/wishlist-slice'
 import { fetchAllProducts } from '@/store/shop/products-slice'
 import { getCartItems } from '@/store/shop/cart-slice/index.ts'
+import { getCategoryItems } from '@/store/common-slice'
 const App = () => {
   const { user, isAuthenticated } = useSelector(state => state.auth)
   const dispatch = useDispatch()
@@ -34,6 +35,7 @@ const App = () => {
     dispatch(fetchAllProducts())
     dispatch(getWishListItems())
     dispatch(getCartItems)
+    dispatch(getCategoryItems())
   }, [])
   return (
     <Routes>

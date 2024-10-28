@@ -10,16 +10,16 @@ const initialState = {
   productList: []
 }
 const token = getUserCookie().token
-
-export const fetchAllProducts = createAsyncThunk(
-  '/products/fetchAllProducts',
-  async () => {
-    const products = await axios.get(
-      ALL_PRODUCTS_API
-    )
-    return products.data
-  }
-)
+//
+// export const fetchAllProducts = createAsyncThunk(
+//   '/products/fetchAllProducts',
+//   async () => {
+//     const products = await axios.get(
+//       ALL_PRODUCTS_API
+//     )
+//     return products.data
+//   }
+// )
 
 export const editProduct = createAsyncThunk(
   '/products/editProduct',

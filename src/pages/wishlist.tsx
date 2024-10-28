@@ -14,12 +14,18 @@ import { useSelector, useDispatch } from 'react-redux'
 import { deleteWishListItem, getWishListItems } from '@/store/shop/wishlist-slice'
 import { TiDeleteOutline } from 'react-icons/ti'
 import { toast } from '@/hooks/use-toast.ts'
+import { useEffect } from 'react'
 const WishlistPage = () => {
   const { wishList } = useSelector((state) => state.shopWishList)
   const { productList } = useSelector((state) => state.adminProducts)
   const dispatch = useDispatch()
 
-  console.log("WishList: ", wishList)
+  useEffect(() => {
+    dispatch(getWishListItems())
+  }, [])
+
+  // console.log("WishList: ", wishList)
+  console.log("WishList: ")
 
   const wishListProducts = Array.isArray(wishList) && wishList.length > 0
     ? wishList.map(item => productList.find(product => product?._id === item?.product_id))
