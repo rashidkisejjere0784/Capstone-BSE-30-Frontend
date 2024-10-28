@@ -2,52 +2,56 @@
 
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
 import Discount from "@/components/Discount.tsx";
-import {products} from "@/assets/data.ts";
-import CartItems from "@/components/cart/CartItems.tsx";
-import {extractNum} from "@/assets/utils.ts";
+import { calculateDiscount, calculateSubTotal, calculateTotal } from '@/assets/utils.ts'
 import Button from "@/components/Button.tsx";
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
 import { toast } from '@/hooks/use-toast.ts'
 import { deleteCartItem, getCartItems } from '@/store/shop/cart-slice/index.ts'
+import { TiDeleteOutline } from 'react-icons/ti'
+import { fetchAllCart } from '@/store/shop/cartSlice'
 
 const Cart = ()=>{
 
-    const { cartList } = useSelector((state) => state.shopCart)
-    const { productList } = useSelector((state) => state.adminProducts)
-    console.log('CartList: ', cartList)
+    const { cartItems } = useSelector((state) => state.shopCart)
+    const { productList } = useSelector((state) => state.shopProducts)
     const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(getCartItems())
-    }, [dispatch])
-    console.log("Products: ", productList)
+    const productMap = {};
 
-    // const cartProducts = Array.isArray(cartList) && cartList.length > 0
-    //   ? cartList.map(item => productList.find(product => product?._id === item?.product_id))
-    //   : []
-    // const handleRemoveFromCart = (cartId) => {
-    //     dispatch(deleteCartItem(cartId)).then((data) => {
-    //         if (data?.payload?.success) {
-    //             toast({
-    //                 title: 'Product removed from Cart List Successfully',
-    //                 description: data?.payload?.message,
-    //                 variant: 'success'
-    //             })
-    //             dispatch(getCartItems())
-    //             dispatch(fetchAllProducts())
-    //         } else {
-    //             toast({
-    //                 title: 'Failed to remove Product from Cart List',
-    //                 description: data?.payload?.message,
-    //                 variant: 'destructive'
-    //             })
-    //         }
-    //     })
-    // }
-    // const getCartId = (id) => {
-    //     return cartList.find(item => item.product_id === id)._id
-    // }
-    const filteredProducts = products.filter((product: { cart: boolean; }) => product.cart);
+    cartItems.products.forEach((item) => {
+        const productId = item.product._id;
+        const totalQuantity = item.cartItem.quantity;
+        if (productMap[productId]) {
+            productMap[productId].quantity += totalQuantity;
+        } else {
+            productMap[productId] = {
+                ...item.product,
+                quantity: totalQuantity,
+            };
+        }
+    });
+    const cartProducts = Object.values(productMap);
+
+    const handleRemoveFromCart = (cartId) => {
+        dispatch(deleteCartItem(cartId)).then((data) => {
+            if (data?.payload?.success) {
+                toast({
+                    title: 'Product removed from Cart List Successfully',
+                    description: data?.payload?.message,
+                    variant: 'success'
+                })
+                dispatch(fetchAllCart())
+            } else {
+                toast({
+                    title: 'Failed to remove Product from Cart List',
+                    description: data?.payload?.message,
+                    variant: 'destructive'
+                })
+            }
+        })
+    }
+    const subTotal = calculateSubTotal(cartProducts);
+    const discount = calculateDiscount(cartProducts);
+    const total = calculateTotal(cartProducts);
 
     return (
         <>
@@ -66,22 +70,24 @@ const Cart = ()=>{
                             </TableHeader>
                             <TableBody>
                                 {
-                                    filteredProducts.map(({id,image, name, price, discount, quantity}: {
-                                            id: string;
-                                            image: string;
+                                    cartProducts.map(({_id, product_image, name, price, discount, quantity}: {
+                                            _id: string;
+                                            product_image: string;
                                             name: string;
-                                            discount: string;
+                                            discount: number;
                                             price: string;
                                             quantity: number
                                         }) => (
-                                            <TableRow key={id}>
+                                            <TableRow key={_id}>
                                                 <TableCell className={"max-w-96 pl-8"}>
                                                     <div className={"flex gap-4 items-center"}>
                                                         <button
-                                                            className={"flex items-center justify-center border-[1px] border-gray-400 text-gray-400 hover:border-danger-500 w-5 h-5 rounded-full hover:text-danger-500"}>
-                                                            <i className="fa-solid fa-xmark"></i></button>
+                                                          onClick={()=>handleRemoveFromCart(_id)}
+                                                            className={"flex items-center justify-center text-gray-400 hover:border-danger-500 w-5 h-5 rounded-full hover:text-danger-500"}>
+                                                            <TiDeleteOutline className={"text-2xl"} />
+                                                        </button>
                                                         <div className={"h-16 w-16"}>
-                                                            <img src={image} alt={"Item Image"}
+                                                            <img src={`http://${product_image}`} alt={"Item Image"}
                                                                  className={"block h-full w-full"}/>
                                                         </div>
                                                         <p className={"hidden md:block"}>{name}</p>
@@ -91,11 +97,11 @@ const Cart = ()=>{
                                                     <Discount price={price} discount={discount} discountPosition={"left"}
                                                               priceColor={"text-gray-700 font-bold"}/>
                                                 </TableCell>
-                                                <TableCell className={"pl-8"}>
-                                                    <CartItems qty={quantity}/>
+                                                <TableCell className={"pl-8 text-center"}>
+                                                    {quantity}
                                                 </TableCell>
                                                 <TableCell className={"pl-8"}>
-                                                    <p>{extractNum(price) * quantity}</p>
+                                                    <p>{price * quantity}</p>
                                                 </TableCell>
                                             </TableRow>
                                         )
@@ -110,15 +116,11 @@ const Cart = ()=>{
                             <div className={"grid grid-cols-2 py-6 border-b-[1px] border-gray-100 text-sm"}>
                                 <div className={"vertical-spacing"}>
                                     <p className={"text-gray-600"}>Sub-total</p>
-                                    <p className={"text-gray-600"}>Shipping</p>
                                     <p className={"text-gray-600"}>Discount</p>
-                                    <p className={"text-gray-600"}>Tax</p>
                                 </div>
                                 <div className={"font-medium text-end vertical-spacing"}>
-                                    <p>$320</p>
-                                    <p>Free</p>
-                                    <p>$24</p>
-                                    <p>$66.99</p>
+                                    <p>{subTotal} ugx</p>
+                                    <p>{discount} ugx</p>
                                 </div>
                             </div>
                             <div className={"grid grid-cols-2 text-sm font-medium py-6"}>
@@ -126,29 +128,11 @@ const Cart = ()=>{
                                     <p>Total</p>
                                 </div>
                                 <div className={"text-end"}>
-                                    $357.99 USD
+                                    {total} ugx
                                 </div>
                             </div>
                             <a href={"/checkout"} className={"block text-gray-00 bg-primary-500 rounded-lg text-center hover:bg-primary-200 font-medium py-4 px-8 w-full"}>Proceed to Checkout <i
                                 className="fa-solid fa-arrow-right-long ml-4"></i></a>
-                        </div>
-                        <div className={"border-[1px] border-gray-100 rounded-lg mt-6"}>
-                            <h3 className={"font-medium text-2xl p-4 border-b-[1px] border-b-400"}>Coupon Code</h3>
-                            <form className={"p-6"}>
-                                <div
-                                    className={`w-full mb-6 bg-white rounded-sm py-[.9rem] px-6 flex gap-4 justify-between items-center border border-gray-100`}>
-
-                                    <input
-                                        id="coupon"
-                                        type="text"
-                                        className="w-full text-gray-500 ring-0 border-0 outline-none focus:outline-none"
-                                        placeholder="coupon code"
-                                    />
-                                </div>
-
-                                <Button title={"APPLY COUPON"}
-                                        className={"bg-secondary-500 text-gray-00 font-bold rounded-lg text-center"}/>
-                            </form>
                         </div>
                     </div>
                 </div>

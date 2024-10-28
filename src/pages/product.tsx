@@ -13,7 +13,7 @@ import { addCartItem } from '@/store/shop/cart-slice/index.ts'
 const Product = ()=>{
     const {productId} = useParams();
     const [tab, setTab] = useState("description");
-    const [product, setProduct] = useState({})
+    // const [product, setProduct] = useState({})
     const { productList } = useSelector((state) => state.shopProducts)
     const dispatch = useDispatch()
     const [cartItem, setCartItem] = useState<{
@@ -23,18 +23,7 @@ const Product = ()=>{
         quantity: 0,
         productId: ''
     })
-
-    console.log("Product: ", productList)
-
-    useEffect(() => {
-        if(productList.length > 0){
-            const productItem = productList.find(
-              (product: { _id: string | undefined }) => product._id === productId
-            )
-            setProduct(productItem)
-        }
-    }, [dispatch])
-
+    const product = productList.length > 0 ? productList.find((product: { _id: string | undefined }) => product._id === productId) : []
 
     const handleSetTab = (value: string)=>{
         setTab(value)
@@ -58,7 +47,7 @@ const Product = ()=>{
                 toast(({
                     title: "Failed to add Product to Cart",
                     description: data?.payload?.message,
-                    variant: 'desctructive'
+                    variant: 'destructive'
                 }))
             }
 

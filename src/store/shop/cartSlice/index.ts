@@ -1,29 +1,25 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { getUserCookie } from '@/assets/utils.ts'
-
 const initialState = {
   isLoading: false,
-  cartList: []
+  cartItems: []
 }
 const SERVER = import.meta.env.VITE_LOCAL_SERVER
-
 const ALL_CART_API = `${SERVER}/cart/all`
 const ADD_CART_API = `${SERVER}/cart/add`
 const DELETE_CART_API = `${SERVER}/cart/delete`
 
 const token = getUserCookie().token
 
-export const getCartItems = createAsyncThunk(
-  '/cart/getCartItems',
+export const fetchAllCart = createAsyncThunk(
+  'cart/fetchAllCart',
   async () => {
-    const response = await axios.get(
-      ALL_CART_API, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+    const response = await axios.get(ALL_CART_API, {
+      headers: {
+        Authorization: `Bearer ${token}`
       }
-    )
+    })
     return response.data
   }
 )
@@ -40,6 +36,7 @@ export const addCartItem = createAsyncThunk(
     return response.data
   }
 )
+
 export const deleteCartItem = createAsyncThunk(
   '/cart/deleteCartItem',
   async (id) => {
@@ -56,35 +53,34 @@ export const deleteCartItem = createAsyncThunk(
     return response.data
   }
 )
-
-const userCartSlice = createSlice({
-  name: 'cartSlice',
+const cartProductsSlice = createSlice({
+  name: 'cartProducts',
   initialState,
   reducers: {
-    setCartProducts: (state) => {
-      state.cartList = []
+    setCartDetails: (state) => {
+      state.cartItems = []
     }
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getCartItems.pending, (state) => {
+      .addCase(fetchAllCart.pending, (state) => {
         console.log('Cart is Pending: ')
         state.isLoading = true
-      }).addCase(getCartItems.rejected, (state) => {
+      }).addCase(fetchAllCart.rejected, (state) => {
         state.isLoading = false
         console.log('Cart is Rejected: ')
-        state.cartList = []
-      }).addCase(getCartItems.fulfilled, (state, action) => {
+        state.cartItems = []
+      }).addCase(fetchAllCart.fulfilled, (state, action) => {
         state.isLoading = false
         console.log('Fulfilled Get CartItems')
-        state.cartList = action.payload
+        state.cartItems = action.payload
       }).addCase(deleteCartItem.fulfilled, (state, action) => {
         state.isLoading = false
-        state.cartList = action.payload
+        state.cartItems = action.payload
       })
   }
 })
 
-export const { setCartProducts } = userCartSlice.actions
+export const { setCartDetails } = cartProductsSlice.actions
 
-export default userCartSlice.reducer
+export default cartProductsSlice.reducer

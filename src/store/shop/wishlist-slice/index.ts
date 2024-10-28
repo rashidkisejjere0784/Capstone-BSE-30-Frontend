@@ -19,7 +19,6 @@ export const getWishListItems = createAsyncThunk(
   async () => {
     const response = await axios.get(
       ALL_WISHLIST_API, {
-        withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -36,7 +35,6 @@ export const addWishListItem = createAsyncThunk(
       ADD_WISHLIST_API, {
         productId: data
       }, {
-        withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -51,7 +49,6 @@ export const editWishListItem = createAsyncThunk(
   async (data) => {
     const response = await axios.post(
       EDIT_WISHLIST_API, data, {
-        withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -69,7 +66,6 @@ export const deleteWishListItem = createAsyncThunk(
     }
     const response = await axios.post(
       DELETE_WISHLIST_API, obj, {
-        withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`
         }

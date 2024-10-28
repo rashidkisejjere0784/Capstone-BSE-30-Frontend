@@ -3,23 +3,12 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { getUserCookie } from '@/assets/utils.ts'
 const SERVER = import.meta.env.VITE_SERVER
-const ALL_PRODUCTS_API = `${SERVER}/api/product/all`
 const DELETE_PRODUCT_API = `${SERVER}/api/product/delete`
 const initialState = {
   isLoading: false,
   productList: []
 }
 const token = getUserCookie().token
-//
-// export const fetchAllProducts = createAsyncThunk(
-//   '/products/fetchAllProducts',
-//   async () => {
-//     const products = await axios.get(
-//       ALL_PRODUCTS_API
-//     )
-//     return products.data
-//   }
-// )
 
 export const editProduct = createAsyncThunk(
   '/products/editProduct',
