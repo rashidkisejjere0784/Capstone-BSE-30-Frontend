@@ -1,16 +1,16 @@
+// @ts-nocheck
+
 import { Navigate, useLocation } from "react-router-dom";
 import { ReactNode } from 'react'
-interface Props {
-  isAuthenticated: boolean;
+type Props = {
+  isAuthenticated: boolean,
   user: {
     role: string
-  };
-  children?: ReactNode;
+  },
+  children?: ReactNode,
 }
 function CheckAuth({ isAuthenticated, user, children }: Props) {
   const location = useLocation();
-
-  console.log(location.pathname, isAuthenticated);
 
   if (location.pathname === "/") {
     if (!isAuthenticated) {

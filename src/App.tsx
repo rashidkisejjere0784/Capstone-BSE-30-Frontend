@@ -14,19 +14,21 @@ import ContactUs from './pages/contactUs'
 import Cart from '@/pages/cart.tsx'
 import Checkout from '@/pages/checkout.tsx'
 import CheckAuth from './components/auth/CheckAuth'
-import { useDispatch, useSelector } from 'react-redux'
 import Admin from '@/layouts/Admin.tsx'
 import AdminDashboard from '@/pages/admin-pages/dashboard.tsx'
 import AdminProducts from '@/pages/admin-pages/products.tsx'
 import AdminCategories from '@/pages/admin-pages/categories.tsx'
 import AdminBrands from '@/pages/admin-pages/brands.tsx'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { setIsAuthenticated, setUser } from '@/store/auth-slice'
 const App = () => {
-  const { user, isAuthenticated, isLoading } = useSelector(
-    (state) => state.auth
-  )
-
-  if (isLoading) return <p>Page Loading</p>
-
+  const { user, isAuthenticated } = useSelector(state => state.auth)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(setUser())
+    dispatch(setIsAuthenticated())
+  }, [])
   return (
     <Routes>
       <Route path='/' element={<Base />}>

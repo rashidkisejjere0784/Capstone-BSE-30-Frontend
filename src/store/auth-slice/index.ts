@@ -2,10 +2,10 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { getUserCookie, setUserCookie } from '@/assets/utils.ts'
 const SERVER = import.meta.env.VITE_SERVER
 const REGISTER_USER_API = `${SERVER}/api/auth/signup`
 const LOG_IN_API = `${SERVER}/api/auth/signin`
-// const CHECK_AUTH_API = `${SERVER}/api/auth/check-auth`
 const LOG_OUT_API = `${SERVER}/api/auth/logout`
 
 const initialState = {
@@ -29,18 +29,16 @@ export const registerUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   '/auth/login',
   async (formData) => {
-    console.log('Form Data: ', formData)
     const response = await axios.post(
       LOG_IN_API,
       formData
     )
-    window.localStorage.setItem('token', response.data.token)
+    setUserCookie(response.data)
     return response.data
   }
 )
 export const logoutUser = createAsyncThunk(
   '/auth/logout',
-
   async () => {
     const response = await axios.post(
       LOG_OUT_API,
@@ -52,11 +50,23 @@ export const logoutUser = createAsyncThunk(
     return response.data
   }
 )
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setUser: (state, action) => {}
+    setUser: (state) => {
+      const userCookie = getUserCookie()
+      if (userCookie !== '') {
+        state.user = userCookie.user
+      } else {
+        state.user = null
+      }
+    },
+    setIsAuthenticated: (state) => {
+      const userCookie = getUserCookie()
+      state.isAuthenticated = userCookie !== ''
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -77,7 +87,8 @@ const authSlice = createSlice({
         state.isLoading = true
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        window.localStorage.setItem('token', action.payload.token)
+        // window.localStorage.setItem('token', action.payload.token)
+        window.sessionStorage.setItem('token', action.payload.token)
         state.isLoading = false
         state.user = action.payload.success ? action.payload.user : null
         state.isAuthenticated = action.payload.success
@@ -95,6 +106,5 @@ const authSlice = createSlice({
       })
   }
 })
-
-export const { setUser } = authSlice.actions
+export const { setUser, setIsAuthenticated } = authSlice.actions
 export default authSlice.reducer

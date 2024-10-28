@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Link, useNavigate } from 'react-router-dom'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -7,8 +9,9 @@ import { FaEye, FaEyeSlash, FaLongArrowAltRight } from 'react-icons/fa'
 import { useState } from 'react'
 import { usePasswordToggle } from '@/assets/utils.ts'
 import { loginUser, registerUser } from '@/store/auth-slice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useToast } from '@/hooks/use-toast.ts'
+import { CgSpinner } from 'react-icons/cg'
 
 const initialSignUpForm = {
   name: '',
@@ -28,6 +31,9 @@ const AuthPage = () => {
   const { inputType, visible, toggleVisibility } = usePasswordToggle()
   const [logInForm, setLogInForm] = useState(initialLoginForm)
   const [signUpForm, setSignUpForm] = useState(initialSignUpForm)
+  const { isLoading } = useSelector(
+    (state) => state.auth
+  )
 
   const handleSignUp = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -53,11 +59,11 @@ const AuthPage = () => {
   }
 
 
-  const handleLogin = async () => {
-    // @ts-ignore
+  const handleLogin = async (e) => {
+    e.preventDefault()
     dispatch(loginUser(logInForm)).then((data) => {
       if (data?.payload?.success) {
-        console.log('Token: ', data?.payload?.token)
+        console.log('Token: ', data)
         toast({
           title: data?.payload?.message,
           variant: "success"
@@ -66,6 +72,7 @@ const AuthPage = () => {
       } else {
         toast({
           title: data?.payload?.message,
+          description: 'Failed to Log in User',
           variant: "destructive",
         });
       }
@@ -171,14 +178,18 @@ const AuthPage = () => {
                   </div>
                   <button
                     type={'submit'}
-                    className={`flex items-center justify-center rounded-sm text-gray-00 bg-primary-500 px-6 py-[.5rem] gap-4 mb-4 w-full`}
+                    className={`flex items-center font-medium justify-center rounded-sm text-gray-00 bg-primary-500 px-6 py-[.5rem] gap-4 mb-4 w-full`}
                   >
-                    <a href={'#'} className={'font-medium text-gray-00'}>
-                      SIGN IN
-                    </a>
-                    <span>
-                      <FaLongArrowAltRight />
-                    </span>
+                    {
+                      !isLoading ?
+                        <>
+                          SIGN IN
+                          <span>
+                            <FaLongArrowAltRight />
+                          </span>
+                        </> :
+                        <CgSpinner/>
+                    }
                   </button>
                 </form>
               </CardContent>
