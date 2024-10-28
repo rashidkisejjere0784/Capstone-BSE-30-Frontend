@@ -76,3 +76,34 @@ export function getUserCookie() {
 export function removeUserCookie() {
   setCookie('user', '', -1);
 }
+
+
+// Function to calculate the subtotal
+export function calculateSubTotal(products) {
+  return products.reduce((sum, item) => {
+
+    const price  = item.price;
+    const quantity  = item.quantity;
+    console.log("Sum: ", price, "\nitem: ", quantity)
+    return sum + price * quantity;
+
+  }, 0);
+}
+
+export function calculateDiscount(products) {
+  return products.reduce((totalDiscount, item) => {
+    const price= item.price;
+    const discount = item.discount
+    const quantity  = item.quantity;
+    const discountAmount =
+      discount > 1 ? discount * quantity : price * discount * 0.01 * quantity;
+    return totalDiscount + discountAmount;
+  }, 0);
+}
+
+// Function to calculate the total after discounts
+export function calculateTotal(products) {
+  const subTotal = calculateSubTotal(products);
+  const discount = calculateDiscount(products);
+  return subTotal - discount;
+}

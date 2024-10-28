@@ -11,7 +11,8 @@ import shopProductsSlice from './shop/products-slice'
 // import shopSearchSlice from "./shop/search-slice";
 
 import userWishListSlice from './shop/wishlist-slice'
-import userCartSlice from './shop/cart-slice'
+// import userCartSlice from './shop/cart-slice'
+import cartProductsSlice from './shop/cartSlice'
 import commonFeatureSlice from './common-slice'
 
 const store = configureStore({
@@ -22,7 +23,7 @@ const store = configureStore({
     // adminOrder: adminOrderSlice,
     //
     shopWishList: userWishListSlice,
-    shopCart: userCartSlice,
+    shopCart: cartProductsSlice,
     shopProducts: shopProductsSlice,
     // shopCart: shopCartSlice,
     // shopAddress: shopAddressSlice,
