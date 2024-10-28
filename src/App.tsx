@@ -43,7 +43,7 @@ const App = () => {
         <Route
           index
           element={
-            <Home />
+            <Products />
           }
         />
         <Route

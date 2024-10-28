@@ -5,10 +5,10 @@ import Feature from "@/components/Feature.tsx";
 import Button from '@/components/Button.tsx'
 import DropDown from '@/components/DropDown.tsx'
 import CartItems from '@/components/cart/CartItems.tsx'
-import {  useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from '@/hooks/use-toast.ts'
-import { addCartItem } from '@/store/shop/cartSlice/index.ts'
+import { addCartItem, fetchAllCart } from '@/store/shop/cartSlice/index.ts'
 
 const Product = ()=>{
     const {productId} = useParams();
@@ -22,6 +22,12 @@ const Product = ()=>{
         quantity: 0,
         productId: ''
     })
+    useEffect(() => {
+        setCartItem({
+            ...cartItem,
+            productId: productId
+        })
+    }, [])
     const product = productList.length > 0 ? productList.find((product: { _id: string | undefined }) => product._id === productId) : []
 
     const handleSetTab = (value: string)=>{
@@ -29,10 +35,7 @@ const Product = ()=>{
     }
 
     const handleAddToCart = () => {
-        setCartItem({
-            ...cartItem,
-            productId: productId
-        })
+
         dispatch(addCartItem(cartItem)).then((data) => {
 
             if(data?.payload?.success){
@@ -41,6 +44,7 @@ const Product = ()=>{
                     description: data?.payload?.message,
                     variant: 'success'
                 }))
+                dispatch(fetchAllCart())
             } else {
                 toast(({
                     title: "Failed to add Product to Cart",
