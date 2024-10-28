@@ -6,7 +6,7 @@ const initialState = {
   categoryList: [],
   brandList: []
 }
-const SERVER = import.meta.env.VITE_LOCAL_SERVER
+const SERVER = import.meta.env.VITE_LOCAL_SERVER;
 
 const ALL_CATEGORY_API = `${SERVER}category/all`
 const DELETE_CATEGORY_API = `${SERVER}category/delete`
@@ -23,7 +23,7 @@ export const getCategoryItems = createAsyncThunk(
   '/order/getCategoryItems',
   async () => {
     const response = await axios.get(
-      ALL_CATEGORY_API
+      ALL_CATEGORY_API , {withCredentials: true}
     )
     return response.data
   }
@@ -81,7 +81,7 @@ export const getBrandItems = createAsyncThunk(
   '/order/getBrandItems',
   async () => {
     const response = await axios.get(
-      ALL_BRAND_API
+      ALL_BRAND_API , {withCredentials: true}
     )
     return response.data
   }

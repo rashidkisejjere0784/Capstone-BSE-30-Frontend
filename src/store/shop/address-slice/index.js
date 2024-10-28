@@ -1,17 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+const SERVER = import.meta.env.VITE_SERVER;
 
 const initialState = {
   isLoading: false,
   addressList: [],
 };
 
+
 export const addNewAddress = createAsyncThunk(
   "/addresses/addNewAddress",
   async (formData) => {
     const response = await axios.post(
-      "http://localhost:5000/api/shop/address/add",
-      formData
+      `${SERVER}/api/shop/address/add`,
+      formData , {withCredentials: true}
     );
 
     return response.data;
@@ -22,7 +24,7 @@ export const fetchAllAddresses = createAsyncThunk(
   "/addresses/fetchAllAddresses",
   async (userId) => {
     const response = await axios.get(
-      `http://localhost:5000/api/shop/address/get/${userId}`
+      `${SERVER}/api/shop/address/get/${userId}`, {withCredentials: true}
     );
 
     return response.data;
@@ -33,8 +35,8 @@ export const editaAddress = createAsyncThunk(
   "/addresses/editaAddress",
   async ({ userId, addressId, formData }) => {
     const response = await axios.put(
-      `http://localhost:5000/api/shop/address/update/${userId}/${addressId}`,
-      formData
+      `${SERVER}/api/shop/address/update/${userId}/${addressId}`,
+      formData , {withCredentials: true}
     );
 
     return response.data;
@@ -45,7 +47,7 @@ export const deleteAddress = createAsyncThunk(
   "/addresses/deleteAddress",
   async ({ userId, addressId }) => {
     const response = await axios.delete(
-      `http://localhost:5000/api/shop/address/delete/${userId}/${addressId}`
+      `${SERVER}/api/shop/address/delete/${userId}/${addressId}` , {withCredentials: true}
     );
 
     return response.data;

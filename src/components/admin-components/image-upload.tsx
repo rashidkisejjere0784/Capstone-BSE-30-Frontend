@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // @ts-nocheck
 
 import { FileIcon, UploadCloudIcon, XIcon } from 'lucide-react'
@@ -7,8 +8,9 @@ import { useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import axios from 'axios'
 import { Skeleton } from '@/components/ui/skeleton'
+const SERVER = import.meta.env.VITE_SERVER;
 
-const IMAGE_UPLOAD_ROUTE = 'http://localhost:5000/api/product-images/add'
+const IMAGE_UPLOAD_ROUTE = `${SERVER}/api/product-images/add`
 const ProductImageUpload = ({
   imageFile,
   setImageFile,

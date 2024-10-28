@@ -21,7 +21,9 @@ import { Label } from '@/components/ui/label.tsx'
 import { Input } from '@/components/ui/input.tsx'
 import { FileIcon, UploadCloudIcon, XIcon } from 'lucide-react'
 
-const ADD_NEW_PRODUCT_API = 'http://localhost:3000/api/product/add'
+const SERVER = import.meta.env.VITE_SERVER;
+
+const ADD_NEW_PRODUCT_API = `${SERVER}/api/product/add`
 
 function AdminProducts () {
   const [openCreateProductsDialog, setOpenCreateProductsDialog] = useState(false)
