@@ -9,27 +9,44 @@ import { toast } from '@/hooks/use-toast.ts'
 import { deleteCartItem } from '@/store/shop/cartSlice/index.ts'
 import { TiDeleteOutline } from 'react-icons/ti'
 import { fetchAllCart } from '@/store/shop/cartSlice'
+import { useParams } from 'react-router-dom'
 
 const Cart = ()=>{
-
     const { cartItems } = useSelector((state) => state.shopCart)
-    const { productList } = useSelector((state) => state.shopProducts)
     const dispatch = useDispatch()
-    const productMap = {};
 
-    cartItems.products.forEach((item) => {
-        const productId = item.product._id;
-        const totalQuantity = item.cartItem.quantity;
-        if (productMap[productId]) {
-            productMap[productId].quantity += totalQuantity;
-        } else {
-            productMap[productId] = {
-                ...item.product,
-                quantity: totalQuantity,
-            };
-        }
-    });
-    const cartProducts = Object.values(productMap);
+    const cartProducts = cartItems?.products?.length > 0
+      ? Object.values(
+        cartItems.products.reduce((productMap, item) => {
+            const productId = item.product._id;
+            const totalQuantity = item.cartItem.quantity;
+            if (productMap[productId]) {
+                productMap[productId].quantity += totalQuantity;
+            } else {
+                productMap[productId] = {
+                    ...item.product,
+                    quantity: totalQuantity,
+                };
+            }
+            return productMap;
+        }, {})
+      )
+      : [];
+
+
+    // cartItems.products.forEach((item) => {
+    //     const productId = item.product._id;
+    //     const totalQuantity = item.cartItem.quantity;
+    //     if (productMap[productId]) {
+    //         productMap[productId].quantity += totalQuantity;
+    //     } else {
+    //         productMap[productId] = {
+    //             ...item.product,
+    //             quantity: totalQuantity,
+    //         };
+    //     }
+    // });
+    // const cartProducts = Object.values(productMap);
 
     const handleRemoveFromCart = (cartId) => {
         dispatch(deleteCartItem(cartId)).then((data) => {
@@ -70,7 +87,8 @@ const Cart = ()=>{
                             </TableHeader>
                             <TableBody>
                                 {
-                                    cartProducts.map(({_id, product_image, name, price, discount, quantity}: {
+                                    cartItems ?
+                                      cartProducts.map(({_id, product_image, name, price, discount, quantity}: {
                                             _id: string;
                                             product_image: string;
                                             name: string;
@@ -78,34 +96,37 @@ const Cart = ()=>{
                                             price: string;
                                             quantity: number
                                         }) => (
-                                            <TableRow key={_id}>
-                                                <TableCell className={"max-w-96 pl-8"}>
-                                                    <div className={"flex gap-4 items-center"}>
-                                                        <button
-                                                          onClick={()=>handleRemoveFromCart(_id)}
-                                                            className={"flex items-center justify-center text-gray-400 hover:border-danger-500 w-5 h-5 rounded-full hover:text-danger-500"}>
-                                                            <TiDeleteOutline className={"text-2xl"} />
-                                                        </button>
-                                                        <div className={"h-16 w-16"}>
-                                                            <img src={`http://${product_image}`} alt={"Item Image"}
-                                                                 className={"block h-full w-full"}/>
-                                                        </div>
-                                                        <p className={"hidden md:block"}>{name}</p>
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell className={"pl-8"}>
-                                                    <Discount price={price} discount={discount} discountPosition={"left"}
-                                                              priceColor={"text-gray-700 font-bold"}/>
-                                                </TableCell>
-                                                <TableCell className={"pl-8 text-center"}>
-                                                    {quantity}
-                                                </TableCell>
-                                                <TableCell className={"pl-8"}>
-                                                    <p>{price * quantity}</p>
-                                                </TableCell>
-                                            </TableRow>
+                                          <TableRow key={_id}>
+                                              <TableCell className={"max-w-96 pl-8"}>
+                                                  <div className={"flex gap-4 items-center"}>
+                                                      <button
+                                                        onClick={()=>handleRemoveFromCart(_id)}
+                                                        className={"flex items-center justify-center text-gray-400 hover:border-danger-500 w-5 h-5 rounded-full hover:text-danger-500"}>
+                                                          <TiDeleteOutline className={"text-2xl"} />
+                                                      </button>
+                                                      <div className={"h-16 w-16"}>
+                                                          <img src={`http://${product_image}`} alt={"Item Image"}
+                                                               className={"block h-full w-full"}/>
+                                                      </div>
+                                                      <p className={"hidden md:block"}>{name}</p>
+                                                  </div>
+                                              </TableCell>
+                                              <TableCell className={"pl-8"}>
+                                                  <Discount price={price} discount={discount} discountPosition={"left"}
+                                                            priceColor={"text-gray-700 font-bold"}/>
+                                              </TableCell>
+                                              <TableCell className={"pl-8 text-center"}>
+                                                  {quantity}
+                                              </TableCell>
+                                              <TableCell className={"pl-8"}>
+                                                  <p>{price * quantity}</p>
+                                              </TableCell>
+                                          </TableRow>
                                         )
-                                    )}
+                                      )
+                                      :
+                                      <TableRow className={"text-2xl font-medium"}>No Products In cart</TableRow>
+                                }
                             </TableBody>
                         </Table>
                     </div>

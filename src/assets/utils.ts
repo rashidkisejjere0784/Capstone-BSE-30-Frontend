@@ -84,7 +84,6 @@ export function calculateSubTotal(products) {
 
     const price  = item.price;
     const quantity  = item.quantity;
-    console.log("Sum: ", price, "\nitem: ", quantity)
     return sum + price * quantity;
 
   }, 0);
