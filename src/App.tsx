@@ -22,12 +22,18 @@ import AdminBrands from '@/pages/admin-pages/brands.tsx'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setIsAuthenticated, setUser } from '@/store/auth-slice'
+import { getWishListItems } from '@/store/shop/wishlist-slice'
+import { fetchAllProducts } from '@/store/shop/products-slice'
+import { getCartItems } from '@/store/shop/cart-slice/index.ts'
 const App = () => {
   const { user, isAuthenticated } = useSelector(state => state.auth)
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(setUser())
     dispatch(setIsAuthenticated())
+    dispatch(fetchAllProducts())
+    dispatch(getWishListItems())
+    dispatch(getCartItems)
   }, [])
   return (
     <Routes>

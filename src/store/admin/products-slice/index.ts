@@ -13,10 +13,10 @@ const token = getUserCookie().token
 
 export const fetchAllProducts = createAsyncThunk(
   '/products/fetchAllProducts',
-
   async () => {
-    const products = await axios.get(ALL_PRODUCTS_API, { withCredentials: true })
-    console.log(products.data)
+    const products = await axios.get(
+      ALL_PRODUCTS_API
+    )
     return products.data
   }
 )
@@ -65,17 +65,7 @@ const AdminProductsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllProducts.pending, (state) => {
-        state.isLoading = true
-      })
-      .addCase(fetchAllProducts.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.productList = action.payload
-      })
-      .addCase(fetchAllProducts.rejected, (state) => {
-        state.isLoading = false
-        state.productList = []
-      }).addCase(deleteProduct.fulfilled, (state) => {
+      .addCase(deleteProduct.fulfilled, (state) => {
         state.isLoading = false
       })
   }

@@ -7,14 +7,14 @@ import DropDown from '@/components/DropDown.tsx'
 import CartItems from '@/components/cart/CartItems.tsx'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllProducts } from '@/store/admin/products-slice'
 import { toast } from '@/hooks/use-toast.ts'
 import { addCartItem } from '@/store/shop/cart-slice/index.ts'
 
 const Product = ()=>{
     const {productId} = useParams();
+    const [tab, setTab] = useState("description");
     const [product, setProduct] = useState({})
-    const { productList } = useSelector((state) => state.adminProducts)
+    const { productList } = useSelector((state) => state.shopProducts)
     const dispatch = useDispatch()
     const [cartItem, setCartItem] = useState<{
         quantity: number,
@@ -24,9 +24,9 @@ const Product = ()=>{
         productId: ''
     })
 
-    useEffect(() => {
-        dispatch(fetchAllProducts())
+    console.log("Product: ", productList)
 
+    useEffect(() => {
         if(productList.length > 0){
             const productItem = productList.find(
               (product: { _id: string | undefined }) => product._id === productId
@@ -35,7 +35,7 @@ const Product = ()=>{
         }
     }, [dispatch])
 
-    const [tab, setTab] = useState("description");
+
     const handleSetTab = (value: string)=>{
         setTab(value)
     }

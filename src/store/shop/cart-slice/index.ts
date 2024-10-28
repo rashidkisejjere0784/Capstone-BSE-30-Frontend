@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { getUserCookie } from '@/assets/utils.ts'
 
 const initialState = {
   isLoading: false,
@@ -7,12 +8,11 @@ const initialState = {
 }
 const SERVER = import.meta.env.VITE_LOCAL_SERVER
 
-const ALL_CART_API = `${SERVER}cart/all`
-const ADD_CART_API = `${SERVER}cart/add`
-const DELETE_CART_API = `${SERVER}cart/delete`
+const ALL_CART_API = `${SERVER}/cart/all`
+const ADD_CART_API = `${SERVER}/cart/add`
+const DELETE_CART_API = `${SERVER}/cart/delete`
 
-// eslint-disable-next-line no-undef
-const token = localStorage.getItem('token')
+const token = getUserCookie().token
 export const getCartItems = createAsyncThunk(
   '/cart/getCartItems',
   async () => {

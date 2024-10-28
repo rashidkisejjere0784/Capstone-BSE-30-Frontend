@@ -3,18 +3,12 @@
 import ProductCard from '@/components/ProductCard.tsx'
 import { FaArrowRight} from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
-import { fetchAllProducts } from '@/store/shop/products-slice'
 import { addWishListItem } from '@/store/shop/wishlist-slice'
 import { toast } from '@/hooks/use-toast.ts'
 import { getRandomProducts } from '@/assets/utils.ts'
 const BestDeals = () => {
   const { productList } = useSelector((state) => state.shopProducts)
   const dispatch = useDispatch()
-  useEffect(() => {
-    // @ts-ignore
-    dispatch(fetchAllProducts())
-  }, [dispatch])
 
   const handleAddToWishList = (productId)=>{
     dispatch(addWishListItem(productId)).then((data)=>{

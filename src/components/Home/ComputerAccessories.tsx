@@ -5,19 +5,12 @@ import ProductCard from '@/components/ProductCard.tsx'
 import ShopNowButton from '@/components/ShopNowButton.tsx'
 import Button from '@/components/Button.tsx'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
-import { fetchAllProducts } from '@/store/shop/products-slice'
 import { addWishListItem } from '@/store/shop/wishlist-slice'
 import { toast } from '@/hooks/use-toast.ts'
 import { getRandomProducts } from '@/assets/utils.ts'
 const ComputerAccessories = () => {
-
   const { productList } = useSelector((state) => state.shopProducts)
   const dispatch = useDispatch()
-  useEffect(() => {
-    // @ts-ignore
-    dispatch(fetchAllProducts())
-  }, [dispatch])
 
   const handleAddToWishList = (productId)=>{
     dispatch(addWishListItem(productId)).then((data)=>{
@@ -38,9 +31,7 @@ const ComputerAccessories = () => {
     })
   }
   return (
-
     <>
-
       <section className='section my-8'>
         <div className='grid 2xl:grid-cols-12 gap-6'>
 
@@ -62,7 +53,7 @@ const ComputerAccessories = () => {
                   <li className='py-2 hover:text-gray-900 hover:border-b-2 hover:border-b-primary-500 hover:font-bold px-2  transition-all duration-100'>TV</li>
                 </ul>
                 <a
-                  href='#'
+                  href='/products'
                   className='flex gap-2 hover:text-secondary-500 text-primary-500 items-center  transition-all duration-100'
                 >
                   <span>Browse All Product</span>
