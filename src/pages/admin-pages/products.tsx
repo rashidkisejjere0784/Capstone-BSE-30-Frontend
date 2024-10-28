@@ -29,7 +29,7 @@ const ADD_NEW_PRODUCT_API = `${SERVER}/api/product/add`
 function AdminProducts () {
   const [openCreateProductsDialog, setOpenCreateProductsDialog] = useState(false)
   const [currentEditedId, setCurrentEditedId] = useState(null)
-  const { productList } = useSelector((state) => state.adminProducts)
+  const { productList } = useSelector((state) => state.shopProducts)
   const { brandList } = useSelector((state) => state.commonFeature)
   const { categoryList } = useSelector((state) => state.commonFeature)
   const dispatch = useDispatch()
@@ -39,9 +39,6 @@ function AdminProducts () {
   useEffect(() => {
     dispatch(getCategoryItems())
     dispatch(getBrandItems())
-    dispatch(fetchAllProducts()).then((data) => {
-
-    })
   }, [dispatch])
   // new code
   const [file, setFile] = useState(null)

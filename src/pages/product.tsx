@@ -5,15 +5,14 @@ import Feature from "@/components/Feature.tsx";
 import Button from '@/components/Button.tsx'
 import DropDown from '@/components/DropDown.tsx'
 import CartItems from '@/components/cart/CartItems.tsx'
-import { useEffect, useState } from 'react'
+import {  useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from '@/hooks/use-toast.ts'
-import { addCartItem } from '@/store/shop/cart-slice/index.ts'
+import { addCartItem } from '@/store/shop/cartSlice/index.ts'
 
 const Product = ()=>{
     const {productId} = useParams();
     const [tab, setTab] = useState("description");
-    // const [product, setProduct] = useState({})
     const { productList } = useSelector((state) => state.shopProducts)
     const dispatch = useDispatch()
     const [cartItem, setCartItem] = useState<{
@@ -29,7 +28,6 @@ const Product = ()=>{
         setTab(value)
     }
 
-    // Cart Logic
     const handleAddToCart = () => {
         setCartItem({
             ...cartItem,
@@ -50,7 +48,6 @@ const Product = ()=>{
                     variant: 'destructive'
                 }))
             }
-
         })
     }
     return (

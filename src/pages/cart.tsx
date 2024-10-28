@@ -6,7 +6,7 @@ import { calculateDiscount, calculateSubTotal, calculateTotal } from '@/assets/u
 import Button from "@/components/Button.tsx";
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from '@/hooks/use-toast.ts'
-import { deleteCartItem, getCartItems } from '@/store/shop/cart-slice/index.ts'
+import { deleteCartItem } from '@/store/shop/cartSlice/index.ts'
 import { TiDeleteOutline } from 'react-icons/ti'
 import { fetchAllCart } from '@/store/shop/cartSlice'
 
