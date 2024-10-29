@@ -124,7 +124,7 @@ const Product = ()=>{
                 <div className="lg:col-span-5">
                   <div className="max-w-full max-h-[29rem] h-full w-full p-4 border-2 mx-auto">
                     <img
-                      src={`http://${product?.product_image}`}
+                      src={`${product?.product_image}`}
                       alt={product?.name}
                       className="w-full h-full object-cover"
                     />

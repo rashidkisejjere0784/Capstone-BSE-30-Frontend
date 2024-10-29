@@ -263,7 +263,7 @@ const Products = () => {
                       key={product?._id}
                       id={product?._id}
                       handleAddToWishList={handleAddToWishList}
-                      src={`http://${product?.product_image}`}
+                      src={`${product?.product_image}`}
                       name={product?.name}
                       amount={product?.price}
                       discount = {product?.discount}

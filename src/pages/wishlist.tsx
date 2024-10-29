@@ -88,7 +88,7 @@ const WishlistPage = () => {
                           </button>
                           <div className='h-16 w-16'>
                             <img
-                              src={`http://${product_image}`}
+                              src={`${product_image}`}
                               alt={name}
                               className='block h-full w-full object-cover'
                             />

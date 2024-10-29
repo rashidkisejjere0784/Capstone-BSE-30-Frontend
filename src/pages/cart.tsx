@@ -73,7 +73,7 @@ const Cart = ()=>{
                                                           <TiDeleteOutline className={"text-2xl"} />
                                                       </button>
                                                       <div className={"h-16 w-16"}>
-                                                          <img src={`http://${product_image}`} alt={"Item Image"}
+                                                          <img src={`${product_image}`} alt={"Item Image"}
                                                                className={"block h-full w-full"}/>
                                                       </div>
                                                       <p className={"hidden md:block"}>{name}</p>

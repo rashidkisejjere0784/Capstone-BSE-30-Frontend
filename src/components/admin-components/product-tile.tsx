@@ -17,7 +17,7 @@ function AdminProductTile ({
   setCurrentEditedId,
   handleDelete
 }) {
-  const productImage = `http://${product?.product_image}`
+  const productImage = `${product?.product_image}`
   return (
     <Card className='w-full max-w-sm mx-auto'>
       <div>
