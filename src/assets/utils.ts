@@ -106,3 +106,33 @@ export function calculateTotal(products) {
   const discount = calculateDiscount(products);
   return subTotal - discount;
 }
+
+
+//cart
+export const getCartProducts = (cartItems) => {
+  if (!cartItems?.products?.length) return [];
+
+  const productMap = cartItems.products.reduce((acc, item) => {
+    const productId = item.product._id;
+    const totalQuantity = item.cartItem.quantity;
+    if (acc[productId]) {
+      acc[productId].quantity += totalQuantity;
+    } else {
+      acc[productId] = {
+        ...item.product,
+        quantity: totalQuantity,
+      };
+    }
+    return acc;
+  }, {});
+
+  return Object.values(productMap);
+};
+
+//wishList
+
+export const getWishListProducts = (products, wishlist) => {
+  const wishlistProductIds = wishlist.map((item) => item.product_id);
+
+  return products.filter((product) => wishlistProductIds.includes(product._id));
+};

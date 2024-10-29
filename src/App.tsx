@@ -4,7 +4,6 @@ import { Route, Routes } from 'react-router-dom'
 import AuthPage from '@/pages/auth'
 import PageNotFound from '@/pages/page-not-found.tsx'
 import Base from '@/layouts/base.tsx'
-
 import Home from '@/pages/home.tsx'
 import Products from '@/pages/products.tsx'
 import Product from '@/pages/product.tsx'
@@ -15,37 +14,47 @@ import Cart from '@/pages/cart.tsx'
 import Checkout from '@/pages/checkout.tsx'
 import CheckAuth from './components/auth/CheckAuth'
 import Admin from '@/layouts/Admin.tsx'
-import AdminDashboard from '@/pages/admin-pages/dashboard.tsx'
 import AdminProducts from '@/pages/admin-pages/products.tsx'
 import AdminCategories from '@/pages/admin-pages/categories.tsx'
 import AdminBrands from '@/pages/admin-pages/brands.tsx'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setIsAuthenticated, setUser } from '@/store/auth-slice'
 import { getWishListItems } from '@/store/shop/wishlist-slice'
 import { fetchAllProducts } from '@/store/shop/products-slice'
-import { getCategoryItems } from '@/store/common-slice'
+import { getBrandItems, getCategoryItems } from '@/store/common-slice'
 import { fetchAllCart } from '@/store/shop/cartSlice'
+
 const App = () => {
   const { user, isAuthenticated } = useSelector(state => state.auth)
   const dispatch = useDispatch()
+  const [loading, setLoading] = useState(true)  // Loading state
+
   useEffect(() => {
-    dispatch(setUser())
-    dispatch(setIsAuthenticated())
-    dispatch(fetchAllProducts())
-    dispatch(getWishListItems())
-    dispatch(getCategoryItems())
-    dispatch(fetchAllCart())
-  }, [])
+    // Dispatch actions to load necessary data
+    const loadUtilities = async () => {
+      await Promise.all([
+        dispatch(setUser()),
+        dispatch(setIsAuthenticated()),
+        dispatch(fetchAllProducts()),
+        dispatch(getWishListItems()),
+        dispatch(getCategoryItems()),
+        dispatch(getBrandItems()),
+        dispatch(fetchAllCart())
+      ])
+      setLoading(false)  // Set loading to false after all utilities are loaded
+    }
+
+    loadUtilities()
+  }, [dispatch])
+
+  // Display loading screen while loading
+  if (loading) return <div>Loading...</div>
+
   return (
     <Routes>
       <Route path='/' element={<Base />}>
-        <Route
-          index
-          element={
-            <Products />
-          }
-        />
+        <Route index element={<Home />} />
         <Route
           path='auth'
           element={
@@ -54,18 +63,8 @@ const App = () => {
             </CheckAuth>
           }
         />
-        <Route
-          path='products'
-          element={
-            <Products />
-          }
-        />
-        <Route
-          path='product/:productId'
-          element={
-            <Product />
-          }
-        />
+        <Route path='products' element={<Products />} />
+        <Route path='product/:productId' element={<Product />} />
         <Route
           path='wishlist'
           element={
@@ -74,12 +73,7 @@ const App = () => {
             </CheckAuth>
           }
         />
-        <Route
-          path='/about'
-          element={
-            <About />
-          }
-        />
+        <Route path='/about' element={<About />} />
         <Route
           path='/cart'
           element={
@@ -96,23 +90,17 @@ const App = () => {
             </CheckAuth>
           }
         />
-        <Route
-          path='/contact'
-          element={
-            <ContactUs />
-          }
-        />
+        <Route path='/contact' element={<ContactUs />} />
       </Route>
-
       <Route path='/admin' element={<Admin />}>
-        <Route index element={<AdminDashboard />} />
+        <Route index element={<AdminProducts />} />
         <Route path='products' element={<AdminProducts />} />
         <Route path='categories' element={<AdminCategories />} />
         <Route path='brands' element={<AdminBrands />} />
       </Route>
-
       <Route path='*' element={<PageNotFound />} />
     </Routes>
   )
 }
+
 export default App

@@ -41,7 +41,7 @@ export const deleteCartItem = createAsyncThunk(
   '/cart/deleteCartItem',
   async (id) => {
     const obj = {
-      cartId: id
+      productId: id
     }
     const response = await axios.post(
       DELETE_CART_API, obj, {

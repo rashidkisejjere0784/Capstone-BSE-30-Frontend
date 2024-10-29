@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {Link} from 'react-router-dom'
 import logo from "/misercom_logo.png";
 import SearchInput from "@/components/SearchInput.tsx";
@@ -16,18 +18,19 @@ import {useState} from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import { useToast } from '@/hooks/use-toast.ts'
 import { logoutUser } from '@/store/auth-slice'
+import { getCartProducts } from '@/assets/utils.ts'
 
 const Header = () => {
     const [activeTab, setActiveTab] = useState("all-category");
     const dispatch = useDispatch();
     const { toast } = useToast();
-    const { isAuthenticated } = useSelector(
-      (state) => state.auth
-    )
+    const { user, isAuthenticated } = useSelector((state) => state.auth)
+    const { cartItems } = useSelector((state) => state.shopCart)
+
+    const cartLength = getCartProducts(cartItems).length
 
     const handleLogout = (e: { preventDefault: () => void }) => {
         e.preventDefault()
-        // @ts-ignore
         dispatch(logoutUser()).then((data)=>{
             if (data?.payload?.success) {
                 toast({
@@ -91,11 +94,10 @@ const Header = () => {
                             <img src={logo} alt="Misercom Logo" className="w-14 h-14" />
                             <h1 className="text-3xl font-extrabold">Misercom</h1>
                         </Link>
-                        <SearchInput />
                         <div className="flex gap-6 text-gray-00 text-2xl">
                             <Link to={"/cart"} className="relative">
-                                <div className="absolute -top-2 -right-2 bg-white w-5 h-5 text-secondary-700 flex items-center justify-center text-sm  rounded-full">
-                                    2
+                                <div className={`${cartLength > 0 ? 'bg-danger-500 text-white' : 'bg-white text-secondary-700'} absolute -top-2 flex -right-2 w-5 h-5 items-center justify-center text-sm  rounded-full`}>
+                                    {cartLength}
                                 </div>
                                 <IoCartOutline />
                             </Link>
