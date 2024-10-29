@@ -128,3 +128,11 @@ export const getCartProducts = (cartItems) => {
 
   return Object.values(productMap);
 };
+
+//wishList
+
+export const getWishListProducts = (products, wishlist) => {
+  const wishlistProductIds = wishlist.map((item) => item.product_id);
+
+  return products.filter((product) => wishlistProductIds.includes(product._id));
+};

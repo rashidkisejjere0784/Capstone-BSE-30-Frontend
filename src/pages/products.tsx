@@ -14,8 +14,8 @@ import {
   PaginationNext,
   PaginationPrevious
 } from '@/components/ui/pagination.tsx'
-import { useSelector } from 'react-redux'
-import { addWishListItem } from '@/store/shop/wishlist-slice'
+import { useDispatch, useSelector } from 'react-redux'
+import { addWishListItem, getWishListItems } from '@/store/shop/wishlist-slice'
 import { toast } from '@/hooks/use-toast.ts'
 
 const Categories = [
@@ -53,7 +53,7 @@ const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState('')
   const [checkedBrands, setCheckedBrands] = useState<string[]>([])
   const { productList } = useSelector((state) => state.shopProducts)
-
+  const dispatch = useDispatch()
   const handleAddToWishList = (productId)=>{
     dispatch(addWishListItem(productId)).then((data)=>{
       if(data?.payload?.success){
@@ -62,6 +62,7 @@ const Products = () => {
           description: data?.payload?.message,
           variant: 'success'
         })
+        dispatch(getWishListItems())
       }else{
         toast({
           title: "Failed to add Product to Wishlist",

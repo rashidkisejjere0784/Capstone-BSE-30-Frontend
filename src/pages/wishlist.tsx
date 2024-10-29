@@ -14,22 +14,17 @@ import { useSelector, useDispatch } from 'react-redux'
 import { deleteWishListItem, getWishListItems } from '@/store/shop/wishlist-slice'
 import { TiDeleteOutline } from 'react-icons/ti'
 import { toast } from '@/hooks/use-toast.ts'
-import { useEffect } from 'react'
+import { getWishListProducts } from '@/assets/utils.ts'
+import { Link, useNavigate } from 'react-router-dom'
+import { fetchAllProducts } from '@/store/shop/products-slice'
+
 const WishlistPage = () => {
   const { wishList } = useSelector((state) => state.shopWishList)
-  const { productList } = useSelector((state) => state.adminProducts)
+  const { productList } = useSelector((state) => state.shopProducts)
   const dispatch = useDispatch()
+  const wishListProducts = getWishListProducts(productList, wishList)
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    dispatch(getWishListItems())
-  }, [])
-
-  // console.log("WishList: ", wishList)
-  console.log("WishList: ")
-
-  const wishListProducts = Array.isArray(wishList) && wishList.length > 0
-    ? wishList.map(item => productList.find(product => product?._id === item?.product_id))
-    : []
   const handleRemoveFromWishList = (wishListId) => {
     dispatch(deleteWishListItem(wishListId)).then((data) => {
       if (data?.payload?.success) {
@@ -39,6 +34,8 @@ const WishlistPage = () => {
           variant: 'success'
         })
         dispatch(getWishListItems())
+        dispatch(fetchAllProducts())
+        navigate(0)
       } else {
         toast({
           title: 'Failed to remove Product from Wishlist',
@@ -55,10 +52,11 @@ const WishlistPage = () => {
     <>
       <section className='section my-8'>
         <div className='w-full border-[1px] border-gray-100 rounded-sm'>
-
           <h3 className='p-6 text-lg font-bold'>Wishlist</h3>
-          <Table className='min-w-[37.5rem]'>
-            <TableCaption className='py-6'>A list of your wishlist items</TableCaption>
+          <Table className='min-w-[42.5rem]'>
+            <TableCaption className='py-6'>
+              A list of your wishlist items
+            </TableCaption>
             <TableHeader>
               <TableRow className='bg-gray-50 px-6 py-2 border-y-2 border-y-gray-100'>
                 <TableHead className=''>PRODUCTS</TableHead>
@@ -68,55 +66,87 @@ const WishlistPage = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-
               {
-                  // eslint-disable-next-line camelcase
-                wishListProducts.map(({ _id, name, discount, price, availability, product_image }) => (
-                  <TableRow key={_id}>
-                    <TableCell className='max-w-96 pl-8'>
-                      <div className='flex gap-4 items-center'>
-                        <button onClick={() => handleRemoveFromWishList(getWishListId(_id))} className='text-2xl hover:text-red-500 duration-300'><TiDeleteOutline /></button>
-                        <div className='h-16 w-16'>
-                          {/* eslint-disable-next-line camelcase */}
-                          <img src={`http://${product_image}`} alt={name} className='block h-full w-full object-cover' />
+                wishListProducts.map(
+                  ({
+                    _id,
+                    name,
+                    discount,
+                    price,
+                    availability,
+                    product_image
+                  }) => (
+                    <TableRow key={_id}>
+                      <TableCell className='max-w-96 pl-8'>
+                        <div className='flex gap-4 items-center'>
+                          <button
+                            onClick={() =>
+                              handleRemoveFromWishList(getWishListId(_id))}
+                            className='text-2xl hover:text-red-500 duration-300'
+                          >
+                            <TiDeleteOutline />
+                          </button>
+                          <div className='h-16 w-16'>
+                            <img
+                              src={`http://${product_image}`}
+                              alt={name}
+                              className='block h-full w-full object-cover'
+                            />
+                          </div>
+                          <p className='hidden md:block'>{name}</p>
                         </div>
-                        <p className='hidden md:block'>{name}</p>
-                      </div>
-                    </TableCell>
-                    <TableCell className='pl-8 text-center'>
-                      <Discount price={price} discount={discount} discountPosition='left' priceColor='text-gray-700 font-bold' />
-                    </TableCell>
-                    <TableCell className='pl-8'>
-                      <div>
-                        {
-
-                            availability
-                              ? <p className='text-success-500'>IN STOCK</p>
-                              : <p className='text-danger-500'>OUT OF STOCK</p>
-                          }
-                      </div>
-                    </TableCell>
-                    <TableCell className='pl-8'>
-                      <div className='flex gap-4 items-center'>
+                      </TableCell>
+                      <TableCell className='pl-8 text-center'>
+                        <Discount
+                          price={price}
+                          discount={discount}
+                          discountPosition='left'
+                          priceColor='text-gray-700 font-bold'
+                        />
+                      </TableCell>
+                      <TableCell className='pl-8'>
                         <div>
-                          {
-                                availability
-                                  ? <Button title='ADD TO CART' icon='fa-opencart ml-4' className='mr-auto bg-primary-500 text-gray-00' />
-                                  : <Button title='ADD TO CART' icon='fa-opencart ml-4' className='mr-auto bg-gray-300 text-gray-00 accent-muted cursor-default' />
-                              }
+                          {availability
+                            ? (
+                              <p className='text-success-500'>IN STOCK</p>
+                              )
+                            : (
+                              <p className='text-danger-500'>OUT OF STOCK</p>
+                              )}
                         </div>
-                        <div><i className='fa-regular fa-circle-xmark text-gray-400 text-lg cursor-pointer hover:text-danger-500' /></div>
-                      </div>
-
-                    </TableCell>
-                  </TableRow>
-
-                ))
-            }
-
+                      </TableCell>
+                      <TableCell className='pl-8'>
+                        <div className='flex gap-4 items-center'>
+                          <div>
+                            {availability
+                              ? (
+                                <Link
+                                  to={`/product/${_id}`}
+                                  className='mr-auto bg-primary-500 text-gray-00 ml-auto z-10 font-bold rounded-sm px-4 py-2'
+                                >
+                                  ADD TO CART
+                                  <i className='fa-brands fa-opencart ml-4' />
+                                </Link>
+                                )
+                              : (
+                                <Button
+                                  title='ADD TO CART'
+                                  icon='fa-opencart ml-4'
+                                  className='mr-auto bg-gray-300 text-gray-00 accent-muted cursor-defauADD TO CARTlt'
+                                />
+                                )}
+                          </div>
+                          <div>
+                            <i className='fa-regular fa-circle-xmark text-gray-400 text-lg cursor-pointer hover:text-danger-500' />
+                          </div>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )
+                )
+              }
             </TableBody>
           </Table>
-
         </div>
       </section>
     </>
