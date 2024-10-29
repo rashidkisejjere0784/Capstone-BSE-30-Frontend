@@ -8,10 +8,10 @@ const initialState = {
 }
 const SERVER = import.meta.env.VITE_LOCAL_SERVER
 
-const ALL_WISHLIST_API = `${SERVER}/wishlist/all`
-const ADD_WISHLIST_API = `${SERVER}/wishlist/add`
-const DELETE_WISHLIST_API = `${SERVER}/wishlist/delete`
-const EDIT_WISHLIST_API = `${SERVER}/wishlist/edit`
+const ALL_WISHLIST_API = `${SERVER}/api/wishlist/all`
+const ADD_WISHLIST_API = `${SERVER}/api/wishlist/add`
+const DELETE_WISHLIST_API = `${SERVER}/api/wishlist/delete`
+const EDIT_WISHLIST_API = `${SERVER}/api/wishlist/edit`
 
 // eslint-disable-next-line no-undef
 const token = getUserCookie().token
