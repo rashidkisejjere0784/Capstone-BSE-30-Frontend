@@ -13,7 +13,7 @@ const DELETE_CART_API = `${SERVER}/api/cart/delete`
 const token = getUserCookie().token
 
 export const fetchAllCart = createAsyncThunk(
-  'cart/fetchAllCart',
+  '/cart/fetchAllCart',
   async () => {
     const response = await axios.get(ALL_CART_API, {
       headers: {
