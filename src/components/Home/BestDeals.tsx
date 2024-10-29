@@ -52,7 +52,7 @@ const BestDeals = () => {
           <div className='my-6 h-fit text-wrap'>
             <div className='border-[.5px] border-gray-100 2xl:grid 2xl:grid-rows-2 2xl:h-[39.75rem]'>
               {/* /!*            Product 1*!/ */}
-              <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 2xl:h-[39.75rem]'>
+              <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 2xl:h-[39.75rem] gap-4'>
                 {getRandomProducts(productList, 8).map(
                   (product: {
                     _id: string

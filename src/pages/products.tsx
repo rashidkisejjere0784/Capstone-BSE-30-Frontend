@@ -53,7 +53,9 @@ const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState('')
   const [checkedBrands, setCheckedBrands] = useState<string[]>([])
   const { productList } = useSelector((state) => state.shopProducts)
+  const { categoryList } = useSelector((state) => state.commonFeature)
   const dispatch = useDispatch()
+  const { brandList } = useSelector((state) => state.commonFeature)
   const handleAddToWishList = (productId)=>{
     dispatch(addWishListItem(productId)).then((data)=>{
       if(data?.payload?.success){
@@ -117,22 +119,22 @@ const Products = () => {
               <div className={'border-b-[1px] pb-8 w-full'}>
                 <h3 className={'mb-4 text-gray-900 font-medium'}>CATEGORY</h3>
                 <div className={'flex flex-col gap-4'}>
-                  {Categories.map((category, index) => (
+                  {categoryList.map((category) => (
                     <label
-                      key={index}
-                      className={`${selectedCategory === category ? 'text-gray-900 font-medium' : 'text-gray-700'} text-sm flex items-center gap-4`}
+                      key={category?._id}
+                      className={`${selectedCategory === category?.name ? 'text-gray-900 font-medium' : 'text-gray-700'} text-sm flex items-center gap-4`}
                     >
                       <input
-                        checked={selectedCategory === category}
-                        onChange={() => handleRadioChange(category)}
+                        checked={selectedCategory === category?.name}
+                        onChange={() => handleRadioChange(category?.name)}
                         className={
                           "relative h-5 w-5 appearance-none rounded-full border-[1.9px] border-solid border-gray-200 before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-transparent before:content-[''] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[''] checked:border-primary-500 checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary-500 checked:after:bg-gray-00 checked:after:content-[''] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] checked:border-8 hover:before:shadow-primary-200 focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-primary-500 focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary-500 checked:focus:before:scale-100 checked:focus:before:shadow-checkbox checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] rtl:float-right"
                         }
                         type={'radio'}
-                        value={category}
+                        value={category?.name}
                         name={'category'}
                       />
-                      {category}
+                      {category?.name}
                     </label>
                   ))}
                 </div>
@@ -142,19 +144,19 @@ const Products = () => {
                   POPULAR BRANDS
                 </h3>
                 <div className={'grid grid-cols-2 gap-4'}>
-                  {Brands.map((brand, index) => (
+                  {brandList.map((brand) => (
                     <label
-                      key={index}
-                      className={`text-sm flex items-center gap-4 ${checkedBrands.includes(brand) ? 'text-gray-900' : 'text-gray-700'}`}
+                      key={brand?._id}
+                      className={`text-sm flex items-center gap-4 ${checkedBrands.includes(brand?.name) ? 'text-gray-900 font-bold' : 'text-gray-700'}`}
                     >
                       <input
-                        onChange={() => handleBrandChange(brand)}
+                        onChange={() => handleBrandChange(brand?.name)}
                         className={'h-5 w-5 rounded-md'}
                         type={'checkbox'}
-                        value={brand}
-                        name={brand}
+                        value={brand?.name}
+                        name={brand?.name}
                       />
-                      {brand}
+                      {brand?.name}
                     </label>
                   ))}
                 </div>
@@ -209,11 +211,6 @@ const Products = () => {
               <div
                 className={'flex flex-wrap gap-4 items-center justify-between'}
               >
-                <SearchInput
-                  maxWidth={'w-[25rem]'}
-                  className={'border-[1px] border-gray-100'}
-                />
-
                 <div className={'flex items-center flex-wrap'}>
                   <p className={'text-sm'}>Sort by:</p>
                   <button className="block border-[1px] border-gray-100 text-sm ml-6 text-gray-700 rounded-sm px-4 py-2">
@@ -269,40 +266,13 @@ const Products = () => {
                       src={`http://${product?.product_image}`}
                       name={product?.name}
                       amount={product?.price}
+                      discount = {product?.discount}
                       className={'max-h-[20rem] overflow-hidden'}
                     />
                   )
                 )}
               </div>
             </div>
-
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious href="/products" />
-                </PaginationItem>
-                <div
-                  className={'flex items-center max-w-[30rem] overflow-hidden'}
-                >
-                  {productList.map((_, index) => (
-                    <PaginationItem key={index}>
-                      <PaginationLink href="#">{index}</PaginationLink>
-                    </PaginationItem>
-                  ))}
-                </div>
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">
-                    {productList.length - 1}
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext href="#" />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
           </div>
         </div>
       </section>
