@@ -1,5 +1,5 @@
 // @ts-nocheck
-import {Link, useParams} from "react-router-dom";
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@radix-ui/react-tabs";
 import Feature from "@/components/Feature.tsx";
 import Button from '@/components/Button.tsx'
@@ -9,16 +9,17 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from '@/hooks/use-toast.ts'
 import { addCartItem, fetchAllCart } from '@/store/shop/cartSlice/index.ts'
+import { getCartProducts } from '@/assets/utils.ts'
 
 const Product = ()=>{
-    const {productId} = useParams();
+    const {productId} = useParams()
     const [tab, setTab] = useState("description");
     const { productList } = useSelector((state) => state.shopProducts)
+    const { user } = useSelector(state => state.auth)
     const dispatch = useDispatch()
-    const [cartItem, setCartItem] = useState<{
-        quantity: number,
-        productId: string
-    }>({
+    const navigate = useNavigate()
+
+    const [cartItem, setCartItem] = useState<{ quantity: number, productId: string }>({
         quantity: 0,
         productId: ''
     })
@@ -35,7 +36,6 @@ const Product = ()=>{
     }
 
     const handleAddToCart = () => {
-
         dispatch(addCartItem(cartItem)).then((data) => {
 
             if(data?.payload?.success){
@@ -51,9 +51,11 @@ const Product = ()=>{
                     description: data?.payload?.message,
                     variant: 'destructive'
                 }))
+                user == null && navigate('/auth')
             }
         })
     }
+
     return (
         <>
         {
@@ -210,26 +212,7 @@ const Product = ()=>{
                                 <div className={"grid lg:grid-cols-4 md:grid-cols-3 gap-14"}>
                                     <div className={"col-span-2 vertical-spacing text-gray-600"}>
                                         <h3 className={"text-gray-900 font-bold"}>Description</h3>
-                                        <p>
-                                            The most powerful MacBook Pro ever is here. With the blazing-fast M1 Pro or
-                                            M1 Max chip
-                                            — the first Apple silicon designed for pros — you get groundbreaking
-                                            performance and
-                                            amazing battery life. Add to that a stunning Liquid Retina XDR display, the
-                                            best camera
-                                            and audio ever in a Mac notebook, and all the ports you need. The first
-                                            notebook of its
-                                            kind, this MacBook Pro is a beast. M1 Pro takes the exceptional performance
-                                            of the M1
-                                            architecture to a whole new level for pro users.
-                                        </p>
-                                        <p>
-                                            Even the most ambitious projects are easily handled with up to 10 CPU cores,
-                                            up to 16
-                                            GPU cores, a 16‑core Neural Engine, and dedicated encode and decode media
-                                            engines that
-                                            support H.264, HEVC, and ProRes codecs.
-                                        </p>
+                                        <p>{product?.description}</p>
                                     </div>
                                     <div className={"vertical-spacing"}>
                                         <h3 className={"font-bold"}>Feature</h3>
@@ -242,19 +225,19 @@ const Product = ()=>{
                                         </div>
                                     {/*    */}
                                     </div>
-                                    <div className={"border-l-[1px] border-l-gray-100 pl-6 vertical-spacing"}>
-                                        <h3 className={"text-gray-900 font-bold"}>Shipping Information</h3>
-                                        <div className={"flex flex-col gap-2"}>
-                                            <p>Courier: <span className={"text-gray-600"}>2-4 days, free shipping</span>
-                                            </p>
-                                            <p>Local Shipping: <span
-                                              className={"text-gray-600"}>up to one week, $19.00</span></p>
-                                            <p>UPS Ground Shipping: <span
-                                              className={"text-gray-600"}>4-6 days, $29.00</span></p>
-                                            <p>Uni shop Global Export: <span className={"text-gray-600"}>3-4 days, $39.00</span>
-                                            </p>
-                                        </div>
-                                    </div>
+                                    {/*<div className={"border-l-[1px] border-l-gray-100 pl-6 vertical-spacing"}>*/}
+                                    {/*    <h3 className={"text-gray-900 font-bold"}>Shipping Information</h3>*/}
+                                    {/*    <div className={"flex flex-col gap-2"}>*/}
+                                    {/*        <p>Courier: <span className={"text-gray-600"}>2-4 days, free shipping</span>*/}
+                                    {/*        </p>*/}
+                                    {/*        <p>Local Shipping: <span*/}
+                                    {/*          className={"text-gray-600"}>up to one week, $19.00</span></p>*/}
+                                    {/*        <p>UPS Ground Shipping: <span*/}
+                                    {/*          className={"text-gray-600"}>4-6 days, $29.00</span></p>*/}
+                                    {/*        <p>Uni shop Global Export: <span className={"text-gray-600"}>3-4 days, $39.00</span>*/}
+                                    {/*        </p>*/}
+                                    {/*    </div>*/}
+                                    {/*</div>*/}
                                 </div>
                             </TabsContent>
                             <TabsContent value="additional-information" className={"py-8 px-6"}>Any Additional

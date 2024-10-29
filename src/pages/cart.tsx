@@ -2,7 +2,7 @@
 
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
 import Discount from "@/components/Discount.tsx";
-import { calculateDiscount, calculateSubTotal, calculateTotal } from '@/assets/utils.ts'
+import { calculateDiscount, calculateSubTotal, calculateTotal, getCartProducts } from '@/assets/utils.ts'
 import Button from "@/components/Button.tsx";
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from '@/hooks/use-toast.ts'
@@ -14,42 +14,10 @@ import { useParams } from 'react-router-dom'
 const Cart = ()=>{
     const { cartItems } = useSelector((state) => state.shopCart)
     const dispatch = useDispatch()
+    const cartProducts = getCartProducts(cartItems)
 
-    const cartProducts = cartItems?.products?.length > 0
-      ? Object.values(
-        cartItems.products.reduce((productMap, item) => {
-            const productId = item.product._id;
-            const totalQuantity = item.cartItem.quantity;
-            if (productMap[productId]) {
-                productMap[productId].quantity += totalQuantity;
-            } else {
-                productMap[productId] = {
-                    ...item.product,
-                    quantity: totalQuantity,
-                };
-            }
-            return productMap;
-        }, {})
-      )
-      : [];
-
-
-    // cartItems.products.forEach((item) => {
-    //     const productId = item.product._id;
-    //     const totalQuantity = item.cartItem.quantity;
-    //     if (productMap[productId]) {
-    //         productMap[productId].quantity += totalQuantity;
-    //     } else {
-    //         productMap[productId] = {
-    //             ...item.product,
-    //             quantity: totalQuantity,
-    //         };
-    //     }
-    // });
-    // const cartProducts = Object.values(productMap);
-
-    const handleRemoveFromCart = (cartId) => {
-        dispatch(deleteCartItem(cartId)).then((data) => {
+    const handleRemoveFromCart = (productId) => {
+        dispatch(deleteCartItem(productId)).then((data) => {
             if (data?.payload?.success) {
                 toast({
                     title: 'Product removed from Cart List Successfully',

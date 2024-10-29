@@ -15,7 +15,6 @@ import Cart from '@/pages/cart.tsx'
 import Checkout from '@/pages/checkout.tsx'
 import CheckAuth from './components/auth/CheckAuth'
 import Admin from '@/layouts/Admin.tsx'
-import AdminDashboard from '@/pages/admin-pages/dashboard.tsx'
 import AdminProducts from '@/pages/admin-pages/products.tsx'
 import AdminCategories from '@/pages/admin-pages/categories.tsx'
 import AdminBrands from '@/pages/admin-pages/brands.tsx'
@@ -43,7 +42,7 @@ const App = () => {
         <Route
           index
           element={
-            <Products />
+            <Home />
           }
         />
         <Route
@@ -105,7 +104,7 @@ const App = () => {
       </Route>
 
       <Route path='/admin' element={<Admin />}>
-        <Route index element={<AdminDashboard />} />
+        <Route index element={<AdminProducts />} />
         <Route path='products' element={<AdminProducts />} />
         <Route path='categories' element={<AdminCategories />} />
         <Route path='brands' element={<AdminBrands />} />
