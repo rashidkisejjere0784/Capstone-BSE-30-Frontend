@@ -97,7 +97,7 @@ const ComputerAccessories = () => {
           <div className="2xl:col-span-3 w-full flex flex-col gap-4">
             <div className="bg-warning-200 rounded-lg p-6">
               <img src={product?.product_image} alt={product?.name} className="mx-auto" />
-              <h3 className="text-gray-900 text-h2 font-bold text-center">
+              <h3 className="text-gray-900 text-h2 font-bold text-center mt-4">
                 {product?.name}
               </h3>
               <p className="text-gray-700 text-center mt-4 mb-2">
