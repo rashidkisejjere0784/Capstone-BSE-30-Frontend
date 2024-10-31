@@ -212,7 +212,6 @@ const Products = () => {
                 className={'flex flex-wrap gap-4 items-center justify-between'}
               >
                 <div className={'flex items-center flex-wrap'}>
-                  <p className={'text-sm'}>Sort by:</p>
                   <button className="block border-[1px] border-gray-100 text-sm ml-6 text-gray-700 rounded-sm px-4 py-2">
                     Most Popular
                     <i className="ml-4 fa-solid fa-angle-down"></i>
@@ -220,29 +219,6 @@ const Products = () => {
                 </div>
               </div>
               {/**/}
-              <div className={'py-[.8rem] px-6 my-4 rounded-md bg-gray-50'}>
-                <ul className={'flex gap-4 items-center text-sm'}>
-                  <button
-                    className={
-                      'text-gray-600 flex duration-150 gap-4 items-center'
-                    }
-                  >
-                    <li>Active Filters:</li>
-                  </button>
-                  <button>
-                    <li className={'text-gray-900 font-medium'}>
-                      Electronics Devices{' '}
-                      <i className="text-gray-600 ml-2 fa-solid fa-xmark"></i>
-                    </li>
-                  </button>
-                  <button>
-                    <li className={'text-gray-900 font-medium'}>
-                      5 Star Rating{' '}
-                      <i className="text-gray-600 ml-2 fa-solid fa-xmark"></i>
-                    </li>
-                  </button>
-                </ul>
-              </div>
             </div>
             <div className={'my-8'}>
               <div

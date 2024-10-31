@@ -1,8 +1,13 @@
-import homepod from '/images/homepod.png'
+// @ts-nocheck
+
 import phone from '/images/xiaomi-mi.png'
 import ShopNowButton from '@/components/ShopNowButton.tsx'
+import { useSelector } from 'react-redux'
+import { getRandomProducts } from '@/assets/utils.ts'
 
 const Advertising = () => {
+  const { productList } = useSelector((state) => state.shopProducts)
+  const product = getRandomProducts(productList, 1)[0]
   return (
     <>
       <section className='section my-8'>
@@ -16,19 +21,19 @@ const Advertising = () => {
                   INTRODUCING
                 </button>
                 <h2 className='text-gray-900 my-4 font-bold text-h2'>
-                  New Apple Homepod Mini
+                  {product?.name}
                 </h2>
                 <p className='text-gray-700 text-sm my-4'>
-                  Jam-packed with innovation, HomePod mini delivers unexpectedly
+                  {product?.description}
                 </p>
-                <ShopNowButton className='text-sm' />
+                <ShopNowButton link={`/product/${product?._id}`} className='text-sm' />
               </div>
             </div>
-            <div>
+            <div className='ml-auto'>
               <img
-                src={homepod}
-                alt='console'
-                className='w-auto object-cover'
+                src={product?.product_image}
+                alt={product?.name}
+                className='w-auto h-full object-cover'
               />
             </div>
           </div>

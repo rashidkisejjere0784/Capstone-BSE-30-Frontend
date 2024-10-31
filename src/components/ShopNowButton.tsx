@@ -1,10 +1,10 @@
-const ShopNowButton = ({className}:{className?: string})=>{
+const ShopNowButton = ({className, link}:{className?: string; link?: string})=>{
     return (
-        <button
+        <a href={link ? link : '/products'}
             className={`${className} flex items-center justify-center rounded-sm text-gray-00 font-bold bg-primary-500 px-6 py-4 gap-4`}>
-            <a href={"#"}>SHOP NOW</a>
+            SHOP NOW
             <span><i className="fa-solid fa-arrow-right"/></span>
-        </button>
+        </a>
     )
 }
 export default ShopNowButton

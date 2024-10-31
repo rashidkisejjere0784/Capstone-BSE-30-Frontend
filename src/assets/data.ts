@@ -983,19 +983,11 @@ export const quickLinks: Links[] = [
     },
     {
         name: "Shopping Cart",
-        link: "#",
+        link: "/cart",
     },
     {
         name: "Wishlist",
-        link: "#",
-    },
-    {
-        name: "Compare",
-        link: "#",
-    },
-    {
-        name: "Track Order",
-        link: "#",
+        link: "/wishlist",
     },
     {
         name: "Customer Help",
