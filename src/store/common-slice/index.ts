@@ -9,15 +9,15 @@ const initialState = {
 }
 const SERVER = import.meta.env.VITE_LOCAL_SERVER
 
-const ALL_CATEGORY_API = `${SERVER}/category/all`
-const DELETE_CATEGORY_API = `${SERVER}/category/delete`
-const ADD_CATEGORY_API = `${SERVER}/category/add`
-const EDIT_CATEGORY_API = `${SERVER}/category/edit`
+const ALL_CATEGORY_API = `${SERVER}/api/category/all`
+const DELETE_CATEGORY_API = `${SERVER}/api/category/delete`
+const ADD_CATEGORY_API = `${SERVER}/api/category/add`
+const EDIT_CATEGORY_API = `${SERVER}/api/category/edit`
 // bRAND APIS
-const ALL_BRAND_API = `${SERVER}/brand/all`
-const DELETE_BRAND_API = `${SERVER}/brand/delete`
-const ADD_BRAND_API = `${SERVER}/brand/add`
-const EDIT_BRAND_API = `${SERVER}/brand/edit`
+const ALL_BRAND_API = `${SERVER}/api/brand/all`
+const DELETE_BRAND_API = `${SERVER}/api/brand/delete`
+const ADD_BRAND_API = `${SERVER}/api/brand/add`
+const EDIT_BRAND_API = `${SERVER}/api/brand/edit`
 const token = getUserCookie().token
 export const getCategoryItems = createAsyncThunk(
   '/order/getCategoryItems',

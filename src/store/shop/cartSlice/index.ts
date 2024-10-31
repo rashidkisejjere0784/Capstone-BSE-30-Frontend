@@ -6,14 +6,14 @@ const initialState = {
   cartItems: []
 }
 const SERVER = import.meta.env.VITE_LOCAL_SERVER
-const ALL_CART_API = `${SERVER}/cart/all`
-const ADD_CART_API = `${SERVER}/cart/add`
-const DELETE_CART_API = `${SERVER}/cart/delete`
+const ALL_CART_API = `${SERVER}/api/cart/all`
+const ADD_CART_API = `${SERVER}/api/cart/add`
+const DELETE_CART_API = `${SERVER}/api/cart/delete`
 
 const token = getUserCookie().token
 
 export const fetchAllCart = createAsyncThunk(
-  'cart/fetchAllCart',
+  '/cart/fetchAllCart',
   async () => {
     const response = await axios.get(ALL_CART_API, {
       headers: {
