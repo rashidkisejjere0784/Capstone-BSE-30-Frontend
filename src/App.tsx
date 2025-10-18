@@ -28,7 +28,7 @@ import { fetchAllCart } from '@/store/shop/cartSlice'
 const App = () => {
   const { user, isAuthenticated } = useSelector(state => state.auth)
   const dispatch = useDispatch()
-  const [loading, setLoading] = useState(true)  // Loading state
+  const [loading, setLoading] = useState(true) // Loading state
 
   useEffect(() => {
     // Dispatch actions to load necessary data
@@ -42,10 +42,10 @@ const App = () => {
         dispatch(getBrandItems()),
         dispatch(fetchAllCart())
       ])
-      setLoading(false)  // Set loading to false after all utilities are loaded
+      setLoading(false) // Set loading to false after all utilities are loaded
     }
 
-    loadUtilities()
+    loadUtilities().then(r => console.log('Successfully loaded resources'))
   }, [dispatch])
 
   // Display loading screen while loading
